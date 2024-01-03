@@ -38,7 +38,6 @@ pub struct Estimate {
     pub name: String,
     pub address: String,
     pub city: String,
-    pub state: String,
     pub phone: String,
     pub email: String,
     pub intake: String,
