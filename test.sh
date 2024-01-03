@@ -4,7 +4,7 @@ curl http://192.168.0.91:8181/addcom/casper/casper@monster.com/this%20is%20anoth
 
 curl http://192.168.0.91:8181/allcom
 
-curl http://192.168.0.91:8181/addesti/foo%20bar/814%20Hull%20Ave/Port@20Orchard/903-465-7811/foo@gmail.com/01/02/2023/01/22/2023
+curl http://192.168.0.91:8181/addesti/foo%20bar/814%20Hull%20Ave/Port@20Orchard/903-465-7811/foo@gmail.com/01-02-2023/01-22-2023
 
 
 

@@ -154,7 +154,7 @@ pub async fn add_estimate(
             env::var("COMSERV_ESTIMATES_DB").expect("COMSERV_ESTIMATES_DB not set");
         let conn = rusqlite::Connection::open(com_serv_estimates_db).unwrap();
         conn.execute(
-            "INSERT INTO estimates (acctid, name, address, city, phone, email, date) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)",
+            "INSERT INTO estimates (acctid, name, address, city, phone, email, intake, reqdate) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)",
             &[&estimate.acctid, &estimate.name, &estimate.address, &estimate.city, &estimate.phone, &estimate.email, &estimate.intake, &estimate.reqdate],
         )
         .expect("unable to insert estimate");
@@ -177,7 +177,7 @@ pub async fn add_estimate(
             env::var("COMSERV_ESTIMATES_DB").expect("COMSERV_ESTIMATES_DB not set");
         let conn = rusqlite::Connection::open(com_serv_estimates_db).unwrap();
         conn.execute(
-            "INSERT INTO estimates (acctid, name, address, city, phone, email, date) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)",
+            "INSERT INTO estimates (acctid, name, address, city, phone, email, intake, reqdate) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)",
             &[&estimate.acctid, &estimate.name, &estimate.address, &estimate.city, &estimate.phone, &estimate.email, &estimate.intake, &estimate.reqdate],
         ).expect("unable to insert estimate");
     };
