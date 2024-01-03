@@ -83,7 +83,25 @@ pub fn db_file_checks() -> bool {
         info!("Estimates db file exists: {:?}", &comserv_esti_db);
     }
 
-    let total = db_dir + acct + auth + comments + estimates;
+    let mut uploads = 0;
+    let comserv_uploads = env::var("COMSERV_UPLOADS").expect("COMSERV_UPLOADS not set");
+    // check if comserv_esti_db exists if not create it
+    if !std::path::Path::new(&comserv_uploads).exists() {
+        std::fs::File::create(&comserv_uploads).expect("Unable to create the estimates db file");
+        info!("Created uploads db file: {:?}", &comserv_uploads);
+        uploads += 1;
+    } else {
+        info!("uploadss db file exists: {:?}", &comserv_uploads);
+    }
+
+
+
+
+
+
+
+
+    let total = db_dir + acct + auth + comments + estimates + uploads;
     if total == 0 || total == 6 {
         return true;
     } else {

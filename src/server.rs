@@ -7,7 +7,7 @@ use std::env;
 
 #[get("/test")]
 pub async fn test() -> impl Responder {
-    HttpResponse::Ok().body("Rusic Web Server is running!")
+    HttpResponse::Ok().body("\nATS Comments Server up and running!\n")
 }
 
 #[get("/allcom")]
