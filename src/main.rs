@@ -7,6 +7,7 @@ use log::info;
 
 
 pub mod accounts;
+pub mod db;
 pub mod envvars;
 pub mod functions;
 pub mod server;
@@ -21,7 +22,9 @@ async fn main() -> std::io::Result<()> {
     let _vars = envvars::set_env_vars();
     
     let db_check = functions::db_file_checks();
-    info!("db_check result: {:?}", db_check); // Log the result of db_check
+    info!("db_check result: {:?}", db_check);
+
+    let _create_tables = db::create_tables();
     
     let uploads_path = env::var("COMSERV_UPLOADS").unwrap();
     let socket = functions::gen_server_addr();

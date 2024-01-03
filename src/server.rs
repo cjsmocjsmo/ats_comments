@@ -54,6 +54,9 @@ pub async fn all_comments() -> impl Responder {
 #[get("/addcom/{name}/{email}/{comment}")]
 pub async fn add_comment(f: web::Path<(String, String, String)>) -> impl Responder {
     let (name, email, comment) = f.into_inner();
+    info!("name: {:#?}", name);
+    info!("email: {:#?}", email);
+    info!("comment: {:#?}", comment);
     let has_acct = accounts::has_account(email.clone());
     if has_acct {
         let acct_info = accounts::account_info_from_email(email.clone());

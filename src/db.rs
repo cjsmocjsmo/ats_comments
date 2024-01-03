@@ -1,8 +1,8 @@
 use log::info;
 use rusqlite::{Connection, Result};
 use std::env;
-use std::fs;
-use std::path::Path;
+// use std::fs;
+// use std::path::Path;
 
 pub fn create_tables() {
     let _at = create_acct_table();
