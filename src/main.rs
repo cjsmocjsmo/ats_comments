@@ -23,8 +23,12 @@ async fn main() -> std::io::Result<()> {
     
     let db_check = functions::db_file_checks();
     info!("db_check result: {:?}", db_check);
+    if db_check == 6 {
+        let _create_tables = db::create_tables();
+    }
+    
 
-    let _create_tables = db::create_tables();
+    
     
     let uploads_path = env::var("COMSERV_UPLOADS").unwrap();
     let socket = functions::gen_server_addr();

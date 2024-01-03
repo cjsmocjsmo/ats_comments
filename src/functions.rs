@@ -20,7 +20,7 @@ pub fn gen_server_addr() -> SocketAddr {
     socket
 }
 
-pub fn db_file_checks() -> bool {
+pub fn db_file_checks() -> i32 {
     let mut db_dir = 0;
     let comserv_db_path = env::var("COMSERV_DB_PATH").expect("COMSERV_DB_PATH not set");
     if !std::path::Path::new(&comserv_db_path).exists() {
@@ -79,9 +79,6 @@ pub fn db_file_checks() -> bool {
 
     let total = db_dir + acct + auth + comments + estimates + uploads;
     info!("Total files created: {}", total);
-    if total == 0 || total == 6 {
-        return true;
-    } else {
-        return false;
-    }
+
+    total 
 }
