@@ -33,13 +33,21 @@ pub fn has_account(email: String) -> bool {
         result.push(acct);
     }
 
-    if result[0].acctid == acctid {
-        info!("Account found: {:?}", result[0].acctid);
-        return true;
+    if result.len() > 0 {
+        info!("account found");
+        return true
     } else {
-        info!("Account not found: {:?}", result[0].acctid);
-        return false;
+        info!("Account not found");
+        return false
     }
+
+    // if result[0].acctid == acctid {
+    //     info!("Account found: {:?}", result[0].acctid);
+    //     return true;
+    // } else {
+    //     info!("Account not found: {:?}", result[0].acctid);
+    //     return false;
+    // }
 }
 
 pub fn create_account(namez: String, emailz: String) -> types::Account {
