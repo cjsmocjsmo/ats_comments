@@ -185,5 +185,5 @@ pub async fn add_estimate(
         ).expect("unable to insert estimate");
     };
 
-    HttpResponse::Ok().body("Estimate inserted into db")
+    HttpResponse::Ok().body("\nEstimate inserted into db\n")
 }

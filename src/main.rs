@@ -46,7 +46,7 @@ async fn main() -> std::io::Result<()> {
             .service(server::add_comment)
             .service(server::all_comments)
             .service(server::add_estimate)
-            // .service(functions::delete_all)
+            .service(server::all_estimates)
             // .service(functions::delete_single)
             .service(fs::Files::new("/uploads", uploads_path.clone()).show_files_listing())
     })
