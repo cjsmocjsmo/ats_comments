@@ -58,7 +58,7 @@ pub fn db_file_checks() -> bool {
         info!("Comments db file exists: {:?}", &comserv_comments_db);
     }
     let mut estimates = 0;
-    let comserv_esti_db = env::var("COMSERV_ESTIMATEs_DB").expect("COMSERV_ESTIMATEs_DB not set");
+    let comserv_esti_db = env::var("COMSERV_ESTIMATES_DB").expect("COMSERV_ESTIMATES_DB not set");
     if !std::path::Path::new(&comserv_esti_db).exists() {
         std::fs::File::create(&comserv_esti_db).expect("Unable to create the estimates db file");
         info!("Created estimates db file: {:?}", &comserv_esti_db);
