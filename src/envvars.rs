@@ -11,10 +11,10 @@ pub fn set_env_vars() {
     if comserv_db_path.is_err() {
         env::set_var("COMSERV_DB_PATH", "/usr/share/ats_comments/ats_comments/db");
     };
-    let comserv_uploads_path = env::var("COMSERV_UPLOADS_PATH");
-    if comserv_uploads_path.is_err() {
+    let comserv_uploads = env::var("COMSERV_UPLOADS");
+    if comserv_uploads.is_err() {
         env::set_var(
-            "COMSERV_UPLOADS_PATH",
+            "COMSERV_UPLOADS",
             "/usr/share/ats_comments/ats_comments/uploads",
         );
     };
