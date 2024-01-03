@@ -96,7 +96,7 @@ pub async fn add_comment(f: web::Path<(String, String, String)>) -> impl Respond
         .expect("unable to insert comment");
     };
 
-    HttpResponse::Ok().body("Comment inserted into db")
+    HttpResponse::Ok().body("Comment inserted into db\n")
 }
 
 
