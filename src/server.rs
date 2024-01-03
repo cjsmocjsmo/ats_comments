@@ -1,14 +1,10 @@
-use actix_web::{get, web, HttpResponse, Responder};
 use crate::accounts;
-// use serde::{Deserialize, Serialize};
-// use std::env;
-// use std::net::{IpAddr, Ipv4Addr, SocketAddr};
-// use std::str::FromStr;
-// // use walkdir::WalkDir;
-// // use env_logger;
-// use log::info;
-// use crate::types;
+use crate::types;
+use actix_web::{get, web, HttpResponse, Responder};
+use std::env;
 
+// use serde::{Deserialize, Serialize};
+use log::info;
 
 #[get("/test")]
 pub async fn test() -> impl Responder {
@@ -22,28 +18,45 @@ pub async fn add_comment(f: web::Path<(String, String, String)>) -> impl Respond
     if has_acct {
         // get account info and insert comment
         let acct_info = accounts::account_info(email.clone());
-        // insert comment
-
+        let acctid = &acct_info[0].acctid;
+        let datae = &acct_info[0].date;
+        let commet = types::Comment {
+            acctid: acctid.to_string(),
+            comment: comment.clone(),
+            date: datae.to_string(),
+        };
+        info!("has_account Comment: {:#?}", commet);
+        let com_serv_comments_db =
+            env::var("COMSERV_COMMENTS_DB").expect("COMSERV_COMMENTS_DB not set");
+        let conn = rusqlite::Connection::open(com_serv_comments_db).unwrap();
+        conn.execute(
+            "INSERT INTO comments (acctid, comment, date) VALUES (?1, ?2, ?3)",
+            &[&commet.acctid, &commet.comment, &commet.date],
+        )
+        .expect("unable to insert comment");
     } else {
-        // create new account and insert comment
         let acct_info = accounts::create_account(name.clone(), email.clone());
-    }
-    // let result = types::ComIntake{
-    //     name: name,
-    //     email: email,
-    //     comment: comment,
-    // };
+        let acctid = &acct_info.acctid;
+        let datae = &acct_info.date;
+        let comment = types::Comment {
+            acctid: acctid.to_string(),
+            comment: comment.clone(),
+            date: datae.to_string(),
+        };
+        info!("create_account Comment: {:#?}", comment);
+        let com_serv_comments_db =
+            env::var("COMSERV_COMMENTS_DB").expect("COMSERV_COMMENTS_DB not set");
+        let conn = rusqlite::Connection::open(com_serv_comments_db).unwrap();
+        conn.execute(
+            "INSERT INTO comments (acctid, comment, date) VALUES (?1, ?2, ?3)",
+            &[&comment.acctid, &comment.comment, &comment.date],
+        )
+        .expect("unable to insert comment");
+    };
 
-    // let comserv_comments_db = env::var("COMSERV_COMMENTS_DB").expect("COMSERV_COMMENTS_DB not set");
-    // let conn = rusqlite::Connection::open(comserv_comments_db).unwrap();
-    // conn.execute(
-    //     "INSERT INTO movies (name, year, posteraddr, size, path, idx, movid, catagory, httpthumbpath) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)",
-    //     &[&mojo.name, &mojo.year, &mojo.posteraddr, &mojo.size, &mojo.path, &mojo.idx, &mojo.movid, &mojo.catagory, &mojo.httpthumbpath],
-    // )
-    // .expect("Unable to insert new tvshow info");
-
-    HttpResponse::Ok().body("Single File Deleted!")
+    HttpResponse::Ok().body("Comment inserted into db")
 }
+
 // #[get("/jsonblob")]
 // pub async fn jsonblob() -> impl Responder {
 //     let dup_info = get_25_files();
@@ -87,8 +100,6 @@ pub async fn add_comment(f: web::Path<(String, String, String)>) -> impl Respond
 
 //     files
 // }
-
-
 
 // #[get("/delete_all/{filename}")]
 // pub async fn delete_all(f: web::Path<String>) -> impl Responder {

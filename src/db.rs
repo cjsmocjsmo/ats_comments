@@ -1,14 +1,14 @@
+use log::info;
 use rusqlite::{Connection, Result};
 use std::env;
-use std::path::Path;
 use std::fs;
-use log::info;
+use std::path::Path;
 
 pub fn create_tables() {
+    let _at = create_acct_table();
+    let _aut = create_auth_table();
     let _cmt = create_comments_table();
     let _et = create_estimates_table();
-    // let _cit = create_images_table();
-    // let _cst = create_stats_table();
 }
 
 pub fn create_acct_table() -> Result<()> {
@@ -17,7 +17,7 @@ pub fn create_acct_table() -> Result<()> {
 
     conn.execute(
         "CREATE TABLE IF NOT EXISTS accounts (
-            id INTEGER PRIMARY KEY,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             acctid TEXT NOT NULL,
             name TEXT NOT NULL,
             email TEXT NOT NULL,
@@ -30,49 +30,13 @@ pub fn create_acct_table() -> Result<()> {
     Ok(())
 }
 
-// pub fn search_for_acctid()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 pub fn create_auth_table() -> Result<()> {
     let db_path = env::var("COMSERV_AUTH_DB").expect("COMSERV_AUTH_DB not set");
     let conn = Connection::open(db_path.clone())?;
 
     conn.execute(
         "CREATE TABLE IF NOT EXISTS auth (
-            id INTEGER PRIMARY KEY,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             acctid TEXT NOT NULL,
             token TEXT NOT NULL,
             indate TEXT NOT NULL,
@@ -91,7 +55,7 @@ pub fn create_comments_table() -> Result<()> {
 
     conn.execute(
         "CREATE TABLE IF NOT EXISTS comments (
-            id INTEGER PRIMARY KEY,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             acctid TEXT NOT NULL,
             comment TEXT NOT NULL,
             date TEXT NOT NULL
@@ -109,7 +73,7 @@ pub fn create_estimates_table() -> Result<()> {
 
     conn.execute(
         "CREATE TABLE IF NOT EXISTS estimates (
-            id INTEGER PRIMARY KEY,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             acctid TEXT NOT NULL,
             name TEXT NOT NULL,
             address TEXT NOT NULL,

@@ -19,15 +19,7 @@ pub struct Auth {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct ComIntake {
-    pub name: String,
-    pub email: String,
-    pub comment: String,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
 pub struct Comment {
-    pub id: i32,
     pub acctid: String,
     pub comment: String,
     pub date: String,
