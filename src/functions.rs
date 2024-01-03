@@ -1,11 +1,7 @@
-// use actix_web::{get, web, HttpResponse, Responder};
-// use serde::{Deserialize, Serialize};
+use log::info;
 use std::env;
 use std::net::{IpAddr, Ipv4Addr, SocketAddr};
 use std::str::FromStr;
-// use walkdir::WalkDir;
-// use env_logger;
-use log::info;
 
 pub fn gen_server_addr() -> SocketAddr {
     let raw_addr = env::var("COMSERV_RAW_HTTP").expect("COMSERV_RAW_HTTP not set");
@@ -80,5 +76,5 @@ pub fn db_file_checks() -> i32 {
     let total = db_dir + acct + auth + comments + estimates + uploads;
     info!("Total files created: {}", total);
 
-    total 
+    total
 }

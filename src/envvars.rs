@@ -1,6 +1,5 @@
-use std::env;
-
 use log::info;
+use std::env;
 
 pub fn set_env_vars() {
     // let base_path = env::var("COMSERV_BASE_PATH");
@@ -13,18 +12,21 @@ pub fn set_env_vars() {
     };
     let comserv_uploads = env::var("COMSERV_UPLOADS");
     if comserv_uploads.is_err() {
-        env::set_var(
-            "COMSERV_UPLOADS",
-            "/usr/share/ats_comments/uploads",
-        );
+        env::set_var("COMSERV_UPLOADS", "/usr/share/ats_comments/uploads");
     };
     let comserv_acct_db = env::var("COMSERV_ACCT_DB");
     if comserv_acct_db.is_err() {
-        env::set_var("COMSERV_ACCT_DB", "/usr/share/ats_comments/ats_comments/db/accounts.db");
+        env::set_var(
+            "COMSERV_ACCT_DB",
+            "/usr/share/ats_comments/ats_comments/db/accounts.db",
+        );
     };
     let comserv_auth_db = env::var("COMSERV_AUTH_DB");
     if comserv_auth_db.is_err() {
-        env::set_var("COMSERV_AUTH_DB", "/usr/share/ats_comments/ats_comments/db/auth.db");
+        env::set_var(
+            "COMSERV_AUTH_DB",
+            "/usr/share/ats_comments/ats_comments/db/auth.db",
+        );
     };
     let comserv_comments_db = env::var("COMSERV_COMMENTS_DB");
     if comserv_comments_db.is_err() {

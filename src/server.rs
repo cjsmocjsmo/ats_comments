@@ -99,7 +99,6 @@ pub async fn add_comment(f: web::Path<(String, String, String)>) -> impl Respond
     HttpResponse::Ok().body("Comment inserted into db\n")
 }
 
-
 #[get("/allesti")]
 pub async fn all_estimates() -> impl Responder {
     let com_serv_estimates_db =
@@ -116,9 +115,9 @@ pub async fn all_estimates() -> impl Responder {
             city: row.get(4).unwrap(),
             phone: row.get(5).unwrap(),
             email: row.get(6).unwrap(),
-            comment: row.get(7).unwrap(), 
-            intake: row.get(8).unwrap(), 
-            reqdate: row.get(9).unwrap(), 
+            comment: row.get(7).unwrap(),
+            intake: row.get(8).unwrap(),
+            reqdate: row.get(9).unwrap(),
         };
         info!("Estimate: {:?}", estimate);
         estimate_vec.push(estimate);
@@ -128,7 +127,6 @@ pub async fn all_estimates() -> impl Responder {
 
     HttpResponse::Ok().body(format!("{:#?}", fullestvec_str))
 }
-
 
 #[get("/addesti/{name}/{address}/{city}/{phone}/{email}/{comment}/{reqdate}")]
 pub async fn add_estimate(
