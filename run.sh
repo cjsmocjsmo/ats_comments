@@ -1,4 +1,4 @@
-!#/bin/bash
+#!/bin/bash
 
 cd /usr/share/ats_comments;
 rm -rf uploads;

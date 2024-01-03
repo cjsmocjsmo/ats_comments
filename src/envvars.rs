@@ -33,10 +33,10 @@ pub fn set_env_vars() {
             "/usr/share/ats_comments/ats_comments/db/comments.db",
         );
     };
-    let comserv_esti_db = env::var("COMSERV_ESTIMATEs_DB");
+    let comserv_esti_db = env::var("COMSERV_ESTIMATES_DB");
     if comserv_esti_db.is_err() {
         env::set_var(
-            "COMSERV_ESTIMATEs_DB",
+            "COMSERV_ESTIMATES_DB",
             "/usr/share/ats_comments/ats_comments/db/estimates.db",
         );
     };
