@@ -116,8 +116,9 @@ pub async fn all_estimates() -> impl Responder {
             city: row.get(4).unwrap(),
             phone: row.get(6).unwrap(),
             email: row.get(7).unwrap(),
-            intake: row.get(8).unwrap(),
-            reqdate: row.get(9).unwrap(),
+            comment: row.get(8).unwrap(), 
+            intake: row.get(9).unwrap(), 
+            reqdate: row.get(10).unwrap(), 
         };
         info!("Estimate: {:?}", estimate);
         estimate_vec.push(estimate);
@@ -129,11 +130,11 @@ pub async fn all_estimates() -> impl Responder {
 }
 
 
-#[get("/addesti/{name}/{address}/{city}/{phone}/{email}/{intake}/{reqdate}")]
+#[get("/addesti/{name}/{address}/{city}/{phone}/{email}/{comment}/{reqdate}")]
 pub async fn add_estimate(
-    f: web::Path<(String, String, String, String, String, String)>,
+    f: web::Path<(String, String, String, String, String, String, String)>,
 ) -> impl Responder {
-    let (name, address, city, phone, email, reqdate) = f.into_inner();
+    let (name, address, city, phone, email, comment, reqdate) = f.into_inner();
     let has_acct = accounts::has_account(email.clone());
     if has_acct {
         let acct_info = accounts::account_info_from_email(email.clone());
@@ -146,6 +147,7 @@ pub async fn add_estimate(
             city: city.clone(),
             phone: phone.clone(),
             email: email.clone(),
+            comment: comment.clone(),
             intake: today.clone(),
             reqdate: reqdate.clone(),
         };
@@ -154,8 +156,8 @@ pub async fn add_estimate(
             env::var("COMSERV_ESTIMATES_DB").expect("COMSERV_ESTIMATES_DB not set");
         let conn = rusqlite::Connection::open(com_serv_estimates_db).unwrap();
         conn.execute(
-            "INSERT INTO estimates (acctid, name, address, city, phone, email, intake, reqdate) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)",
-            &[&estimate.acctid, &estimate.name, &estimate.address, &estimate.city, &estimate.phone, &estimate.email, &estimate.intake, &estimate.reqdate],
+            "INSERT INTO estimates (acctid, name, address, city, phone, email, comment, intake, reqdate) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)",
+            &[&estimate.acctid, &estimate.name, &estimate.address, &estimate.city, &estimate.phone, &estimate.email, &estimate.comment, &estimate.intake, &estimate.reqdate],
         )
         .expect("unable to insert estimate");
     } else {
@@ -169,6 +171,7 @@ pub async fn add_estimate(
             city: city.clone(),
             phone: phone.clone(),
             email: email.clone(),
+            comment: comment.clone(),
             intake: today.clone(),
             reqdate: reqdate.clone(),
         };
@@ -177,8 +180,8 @@ pub async fn add_estimate(
             env::var("COMSERV_ESTIMATES_DB").expect("COMSERV_ESTIMATES_DB not set");
         let conn = rusqlite::Connection::open(com_serv_estimates_db).unwrap();
         conn.execute(
-            "INSERT INTO estimates (acctid, name, address, city, phone, email, intake, reqdate) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)",
-            &[&estimate.acctid, &estimate.name, &estimate.address, &estimate.city, &estimate.phone, &estimate.email, &estimate.intake, &estimate.reqdate],
+            "INSERT INTO estimates (acctid, name, address, city, phone, email, comment, intake, reqdate) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)",
+            &[&estimate.acctid, &estimate.name, &estimate.address, &estimate.city, &estimate.phone, &estimate.email, &estimate.comment, &estimate.intake, &estimate.reqdate],
         ).expect("unable to insert estimate");
     };
 

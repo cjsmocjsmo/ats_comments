@@ -40,6 +40,7 @@ pub struct Estimate {
     pub city: String,
     pub phone: String,
     pub email: String,
+    pub comment: String,
     pub intake: String,
     pub reqdate: String,
 }
