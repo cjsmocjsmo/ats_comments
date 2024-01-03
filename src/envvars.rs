@@ -15,7 +15,7 @@ pub fn set_env_vars() {
     if comserv_uploads.is_err() {
         env::set_var(
             "COMSERV_UPLOADS",
-            "/usr/share/ats_comments/ats_comments/uploads",
+            "/usr/share/ats_comments/uploads",
         );
     };
     let comserv_acct_db = env::var("COMSERV_ACCT_DB");

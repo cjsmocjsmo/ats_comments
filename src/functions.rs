@@ -74,7 +74,6 @@ pub fn db_file_checks() -> bool {
     }
     let mut estimates = 0;
     let comserv_esti_db = env::var("COMSERV_ESTIMATEs_DB").expect("COMSERV_ESTIMATEs_DB not set");
-    // check if comserv_esti_db exists if not create it
     if !std::path::Path::new(&comserv_esti_db).exists() {
         std::fs::File::create(&comserv_esti_db).expect("Unable to create the estimates db file");
         info!("Created estimates db file: {:?}", &comserv_esti_db);
@@ -85,21 +84,13 @@ pub fn db_file_checks() -> bool {
 
     let mut uploads = 0;
     let comserv_uploads = env::var("COMSERV_UPLOADS").expect("COMSERV_UPLOADS not set");
-    // check if comserv_esti_db exists if not create it
     if !std::path::Path::new(&comserv_uploads).exists() {
-        std::fs::File::create(&comserv_uploads).expect("Unable to create the estimates db file");
-        info!("Created uploads db file: {:?}", &comserv_uploads);
+        std::fs::create_dir(&comserv_uploads).expect("Unable to create the uploads db file");
+        info!("Created dir file: {:?}", &comserv_uploads);
         uploads += 1;
     } else {
-        info!("uploadss db file exists: {:?}", &comserv_uploads);
+        info!("uploadss dir exists: {:?}", &comserv_uploads);
     }
-
-
-
-
-
-
-
 
     let total = db_dir + acct + auth + comments + estimates + uploads;
     if total == 0 || total == 6 {
@@ -108,4 +99,3 @@ pub fn db_file_checks() -> bool {
         return false;
     }
 }
-
