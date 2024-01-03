@@ -23,7 +23,7 @@ async fn main() -> std::io::Result<()> {
     let db_check = functions::db_file_checks();
     info!("db_check result: {:?}", db_check); // Log the result of db_check
     
-    let uploads_path = env::var("COMSERV_UPLOADS_PATH").unwrap();
+    let uploads_path = env::var("COMSERV_UPLOADS").unwrap();
     let socket = functions::gen_server_addr();
     
 

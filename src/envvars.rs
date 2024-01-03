@@ -3,10 +3,10 @@ use std::env;
 use log::info;
 
 pub fn set_env_vars() {
-    let base_path = env::var("COMSERV_BASE_PATH");
-    if base_path.is_err() {
-        env::set_var("COMSERV_BASE_PATH", "/usr/share/ats_comments/ats_comments");
-    };
+    // let base_path = env::var("COMSERV_BASE_PATH");
+    // if base_path.is_err() {
+    //     env::set_var("COMSERV_BASE_PATH", "/usr/share/ats_comments/ats_comments");
+    // };
     let comserv_db_path = env::var("COMSERV_DB_PATH");
     if comserv_db_path.is_err() {
         env::set_var("COMSERV_DB_PATH", "/usr/share/ats_comments/ats_comments/db");
