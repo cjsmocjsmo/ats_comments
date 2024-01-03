@@ -10,12 +10,53 @@ pub async fn test() -> impl Responder {
     HttpResponse::Ok().body("Rusic Web Server is running!")
 }
 
-#[get("/comment/{name}/{email}/{comment}")]
+#[get("/allcom")]
+pub async fn all_comments() -> impl Responder {
+    let com_serv_comments_db =
+        env::var("COMSERV_COMMENTS_DB").expect("COMSERV_COMMENTS_DB not set");
+    let conn = rusqlite::Connection::open(com_serv_comments_db).unwrap();
+    let mut stmt = conn.prepare("SELECT * FROM comments").unwrap();
+    let mut rows = stmt.query([]).unwrap();
+    let mut comment_vec = Vec::new();
+    while let Some(row) = rows.next().unwrap() {
+        let comment = types::Comment {
+            acctid: row.get(1).unwrap(),
+            comment: row.get(2).unwrap(),
+            date: row.get(3).unwrap(),
+        };
+        info!("Comment: {:?}", comment);
+        comment_vec.push(comment);
+    }
+
+    let mut fullcomvec = Vec::new();
+    for com in comment_vec {
+        let acctidz = &com.acctid;
+        let acct_info = accounts::account_info_from_acctid(acctidz.to_string());
+        let name = &acct_info[0].name;
+        let email = &acct_info[0].email;
+        let date = com.date;
+        let full_comment = types::FullComment {
+            acctid: acctidz.to_string(),
+            name: name.to_string(),
+            email: email.to_string(),
+            comment: com.comment,
+            date: date,
+        };
+        info!("Full Comment: {:#?}", full_comment);
+        fullcomvec.push(full_comment);
+    }
+
+    let fullcomvec_str = serde_json::to_string(&fullcomvec).unwrap();
+
+    HttpResponse::Ok().body(format!("{:#?}", fullcomvec_str))
+}
+
+#[get("/addcom/{name}/{email}/{comment}")]
 pub async fn add_comment(f: web::Path<(String, String, String)>) -> impl Responder {
     let (name, email, comment) = f.into_inner();
     let has_acct = accounts::has_account(email.clone());
     if has_acct {
-        let acct_info = accounts::account_info(email.clone());
+        let acct_info = accounts::account_info_from_email(email.clone());
         let acctid = &acct_info[0].acctid;
         let datae = &acct_info[0].date;
         let commet = types::Comment {
@@ -55,14 +96,45 @@ pub async fn add_comment(f: web::Path<(String, String, String)>) -> impl Respond
     HttpResponse::Ok().body("Comment inserted into db")
 }
 
-#[get("/estimate/{name}/{address}/{city}/{state}/{phone}/{email}/{intake}/{reqdate}")]
+
+#[get("/allesti")]
+pub async fn all_estimates() -> impl Responder {
+    let com_serv_estimates_db =
+        env::var("COMSERV_ESTIMATES_DB").expect("COMSERV_ESTIMATES_DB not set");
+    let conn = rusqlite::Connection::open(com_serv_estimates_db).unwrap();
+    let mut stmt = conn.prepare("SELECT * FROM estimates").unwrap();
+    let mut rows = stmt.query([]).unwrap();
+    let mut estimate_vec = Vec::new();
+    while let Some(row) = rows.next().unwrap() {
+        let estimate = types::Estimate {
+            acctid: row.get(1).unwrap(),
+            name: row.get(2).unwrap(),
+            address: row.get(3).unwrap(),
+            city: row.get(4).unwrap(),
+            state: row.get(5).unwrap(),
+            phone: row.get(6).unwrap(),
+            email: row.get(7).unwrap(),
+            intake: row.get(8).unwrap(),
+            reqdate: row.get(9).unwrap(),
+        };
+        info!("Estimate: {:?}", estimate);
+        estimate_vec.push(estimate);
+    }
+
+    let fullestvec_str = serde_json::to_string(&estimate_vec).unwrap();
+
+    HttpResponse::Ok().body(format!("{:#?}", fullestvec_str))
+}
+
+
+#[get("/addesti/{name}/{address}/{city}/{state}/{phone}/{email}/{intake}/{reqdate}")]
 pub async fn add_estimate(
     f: web::Path<(String, String, String, String, String, String, String)>,
 ) -> impl Responder {
     let (name, address, city, state, phone, email, reqdate) = f.into_inner();
     let has_acct = accounts::has_account(email.clone());
     if has_acct {
-        let acct_info = accounts::account_info(email.clone());
+        let acct_info = accounts::account_info_from_email(email.clone());
         let acctid = &acct_info[0].acctid;
         let today = Local::now().format("%Y-%m-%d").to_string();
         let estimate = types::Estimate {

@@ -24,6 +24,15 @@ pub struct Comment {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+pub struct FullComment {
+    pub acctid: String,
+    pub name: String,
+    pub email: String,
+    pub comment: String,
+    pub date: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Estimate {
     pub acctid: String,
     pub name: String,

@@ -62,8 +62,30 @@ pub fn create_account(namez: String, emailz: String) -> types::Account {
     acct
 }
 
-pub fn account_info(email: String) -> Vec<types::Account> {
+pub fn account_info_from_email(email: String) -> Vec<types::Account> {
     let acctid = create_acctid(email.clone());
+    let db_path = env::var("COMSERV_ACCT_DB").expect("COMSERV_ACCT_DB not set");
+    let conn = Connection::open(db_path.clone()).unwrap();
+    let mut stmt = conn
+        .prepare("SELECT * FROM accounts WHERE acctid = ?1")
+        .unwrap();
+    let mut rows = stmt.query(&[&acctid]).unwrap();
+    let mut result = Vec::new();
+    while let Some(row) = rows.next().unwrap() {
+        let acct = types::Account {
+            acctid: row.get(1).unwrap(),
+            name: row.get(2).unwrap(),
+            email: row.get(3).unwrap(),
+            date: row.get(4).unwrap(),
+        };
+        info!("Account: {:?}", acct);
+        result.push(acct);
+    }
+
+    result
+}
+
+pub fn account_info_from_acctid(acctid: String) -> Vec<types::Account> {
     let db_path = env::var("COMSERV_ACCT_DB").expect("COMSERV_ACCT_DB not set");
     let conn = Connection::open(db_path.clone()).unwrap();
     let mut stmt = conn

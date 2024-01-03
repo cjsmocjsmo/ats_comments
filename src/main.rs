@@ -37,6 +37,7 @@ async fn main() -> std::io::Result<()> {
             .wrap(cors)
             .service(server::test)
             .service(server::add_comment)
+            .service(server::all_comments)
             .service(server::add_estimate)
             // .service(functions::delete_all)
             // .service(functions::delete_single)
