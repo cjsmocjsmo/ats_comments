@@ -23,7 +23,7 @@ async fn main() -> std::io::Result<()> {
     let db_check = functions::db_file_checks();
     info!("db_check result: {:?}", db_check); // Log the result of db_check
     
-    let uploads_path = env::var("COMSERV_UPLOADS_PATH").unwrap();
+    // let uploads_path = env::var("COMSERV_UPLOADS_PATH").unwrap();
     let socket = functions::gen_server_addr();
     
 
@@ -41,7 +41,7 @@ async fn main() -> std::io::Result<()> {
             // .service(server::add_estimate)
             // .service(functions::delete_all)
             // .service(functions::delete_single)
-            .service(fs::Files::new("/uploads", uploads_path.clone()).show_files_listing())
+            // .service(fs::Files::new("/uploads", uploads_path.clone()).show_files_listing())
     })
     .bind(socket)?
     .run()
