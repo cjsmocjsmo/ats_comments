@@ -22,16 +22,16 @@ pub fn gen_server_addr() -> SocketAddr {
 }
 
 pub fn db_file_checks() -> bool {
-    let mut ac_dir = 0;
-    let comserv_base_path = env::var("COMSERV_BASE_PATH").expect("COMSERV_BASE_PATH not set");
-    // check if comserv_base_path exists if not create it
-    if !std::path::Path::new(&comserv_base_path).exists() {
-        std::fs::create_dir(&comserv_base_path).expect("Unable to create base path");
-        info!("Created base path: {:?}", &comserv_base_path);
-        ac_dir += 1;
-    } else {
-        info!("Base path exists: {:?}", &comserv_base_path);
-    }
+    // let mut ac_dir = 0;
+    // let comserv_base_path = env::var("COMSERV_BASE_PATH").expect("COMSERV_BASE_PATH not set");
+    // // check if comserv_base_path exists if not create it
+    // if !std::path::Path::new(&comserv_base_path).exists() {
+    //     std::fs::create_dir(&comserv_base_path).expect("Unable to create base path");
+    //     info!("Created base path: {:?}", &comserv_base_path);
+    //     ac_dir += 1;
+    // } else {
+    //     info!("Base path exists: {:?}", &comserv_base_path);
+    // }
     let mut db_dir = 0;
     let comserv_db_path = env::var("COMSERV_DB_PATH").expect("COMSERV_DB_PATH not set");
     // check if comserv_db_path exists if not create it
@@ -83,7 +83,7 @@ pub fn db_file_checks() -> bool {
         info!("Estimates db file exists: {:?}", &comserv_esti_db);
     }
 
-    let total = ac_dir + db_dir + acct + auth + comments + estimates;
+    let total = db_dir + acct + auth + comments + estimates;
     if total == 0 || total == 6 {
         return true;
     } else {
