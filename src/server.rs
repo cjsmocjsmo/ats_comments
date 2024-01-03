@@ -114,11 +114,11 @@ pub async fn all_estimates() -> impl Responder {
             name: row.get(2).unwrap(),
             address: row.get(3).unwrap(),
             city: row.get(4).unwrap(),
-            phone: row.get(6).unwrap(),
-            email: row.get(7).unwrap(),
-            comment: row.get(8).unwrap(), 
-            intake: row.get(9).unwrap(), 
-            reqdate: row.get(10).unwrap(), 
+            phone: row.get(5).unwrap(),
+            email: row.get(6).unwrap(),
+            comment: row.get(7).unwrap(), 
+            intake: row.get(8).unwrap(), 
+            reqdate: row.get(9).unwrap(), 
         };
         info!("Estimate: {:?}", estimate);
         estimate_vec.push(estimate);
