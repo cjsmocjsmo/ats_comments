@@ -2,7 +2,6 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Account {
-    pub id: i32,
     pub acctid: String,
     pub name: String,
     pub email: String,
@@ -11,7 +10,6 @@ pub struct Account {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Auth {
-    pub id: i32,
     pub acctid: String,
     pub token: String,
     pub indate: String,
@@ -27,14 +25,13 @@ pub struct Comment {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Estimate {
-    pub id: i32,
     pub acctid: String,
     pub name: String,
-    pub email: String,
-    pub phone: String,
     pub address: String,
     pub city: String,
     pub state: String,
-    pub zip: String,
-    pub date: String,
+    pub phone: String,
+    pub email: String,
+    pub intake: String,
+    pub reqdate: String,
 }

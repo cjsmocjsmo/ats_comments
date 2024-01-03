@@ -1,8 +1,8 @@
+use crate::types;
 use log::info;
 use md5::{Digest, Md5};
 use rusqlite::Connection;
 use std::env;
-use crate::types;
 
 pub fn create_acctid(email: String) -> String {
     let mut hasher = Md5::new();
@@ -24,7 +24,6 @@ pub fn has_account(email: String) -> bool {
     let mut result = Vec::new();
     while let Some(row) = rows.next().unwrap() {
         let acct = types::Account {
-            id: row.get(0).unwrap(),
             acctid: row.get(1).unwrap(),
             name: row.get(2).unwrap(),
             email: row.get(3).unwrap(),
@@ -35,20 +34,17 @@ pub fn has_account(email: String) -> bool {
     }
 
     if result[0].acctid == acctid {
-
-       info!("Account found: {:?}", result[0].acctid);
-       return true
-        
+        info!("Account found: {:?}", result[0].acctid);
+        return true;
     } else {
         info!("Account not found: {:?}", result[0].acctid);
-        return false
+        return false;
     }
 }
 
 pub fn create_account(namez: String, emailz: String) -> types::Account {
     let acct_id = create_acctid(emailz.clone());
     let acct = types::Account {
-        id: 0,
         acctid: acct_id,
         name: namez,
         email: emailz,
@@ -59,13 +55,8 @@ pub fn create_account(namez: String, emailz: String) -> types::Account {
     let mut stmt = conn
         .prepare("INSERT INTO accounts (acctid, name, email, date) VALUES (?1, ?2, ?3, ?4)")
         .unwrap();
-    let _result = stmt 
-        .execute(&[
-            &acct.acctid,
-            &acct.name,
-            &acct.email,
-            &acct.date,
-        ])
+    let _result = stmt
+        .execute(&[&acct.acctid, &acct.name, &acct.email, &acct.date])
         .unwrap();
 
     acct
@@ -82,7 +73,6 @@ pub fn account_info(email: String) -> Vec<types::Account> {
     let mut result = Vec::new();
     while let Some(row) = rows.next().unwrap() {
         let acct = types::Account {
-            id: row.get(0).unwrap(),
             acctid: row.get(1).unwrap(),
             name: row.get(2).unwrap(),
             email: row.get(3).unwrap(),
