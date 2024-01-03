@@ -81,6 +81,7 @@ pub fn create_estimates_table() -> Result<()> {
             phone TEXT NOT NULL,
             email TEXT NOT NULL,
             comment TEXT NOT NULL,
+            intake TEXT NOT NULL,
             date TEXT NOT NULL
          )",
         (),
