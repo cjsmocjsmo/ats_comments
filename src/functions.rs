@@ -91,8 +91,10 @@ pub fn db_file_checks() -> bool {
     } else {
         info!("uploadss dir exists: {:?}", &comserv_uploads);
     }
+    info!("Files created: db_dir: {}\n, acct: {}\n, auth: {}\n, comments: {}\n, estimates: {}\n, uploads: {}\n", db_dir, acct, auth, comments, estimates, uploads);
 
     let total = db_dir + acct + auth + comments + estimates + uploads;
+    info!("Total files created: {}", total);
     if total == 0 || total == 6 {
         return true;
     } else {
