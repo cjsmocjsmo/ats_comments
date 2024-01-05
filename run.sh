@@ -24,7 +24,7 @@ echo "Removed db dir";
 
 git pull;
 
-RUST_LOG=info cargo build --release;
+RUST_LOG=info cargo run --release;
 # cargo build --release;
 
 # ATSCOMMENTS = "/usr/share/ats_comments/ats_comments/target/release/ats_comments";
