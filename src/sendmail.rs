@@ -9,9 +9,9 @@ pub fn comment_sendmail(com_info: types::Comment) {
     let comment = format!("-comment {}", com_info.comment);
 
     let output = Command::new("/usr/share/sendmail/sendmail/sendmail")
-        .arg(msgid)
-        .arg(email)
-        .arg(comment)
+        .arg("-msgid")
+        .arg("-email")
+        .arg("-comment")
         .output()
         .expect("Failed to execute script");
 
