@@ -5,18 +5,19 @@ if [ ! -d "/usr/share/sendmail" ]; then
     exit 1;
 fi
 
-if [ ! -d "/usr/share/sendmail/sendmail" ]; then
-    cd "/usr/share/sendmail";
-    git clone "https://github.com/cjsmocjsmo/sendmail.git";
-    cd "/usr/share/ats_comments/ats_comments";
-    go build;
-    cd "/usr/share/ats_comments/ats_comments";
-else if [ -d "/usr/share/sendmail/sendmail" ]; then
+if [ -d "/usr/share/sendmail/sendmail" ]; then
     cd /usr/share/sendmail/sendmail;
     git pull;
     go build;
     cd "/usr/share/ats_comments/ats_comments";
     fi
+fi
+
+if [ ! -d "/usr/share/sendmail/sendmail" ]; then
+    cd "/usr/share/sendmail";
+    git clone "https://github.com/cjsmocjsmo/sendmail.git";
+    go build;
+    cd "/usr/share/ats_comments/ats_comments";
 fi
 
 if [ -d "/usr/share/ats_comments/uploads" ]; then
