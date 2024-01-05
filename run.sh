@@ -15,6 +15,7 @@ fi
 if [ ! -d "/usr/share/sendmail/sendmail" ]; then
     cd "/usr/share/sendmail";
     git clone "https://github.com/cjsmocjsmo/sendmail.git";
+    cd "/usr/share/sendmail/sendmail";
     go build;
     cd "/usr/share/ats_comments/ats_comments";
 fi
