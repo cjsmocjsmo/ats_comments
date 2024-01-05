@@ -102,7 +102,8 @@ pub async fn add_comment(f: web::Path<(String, String, String)>) -> impl Respond
             date: datae.to_string(),
         };
         info!("has_account Comment: {:#?}", minicom);
-        let _sendmail = sendmail::comment_sendmail(minicom);
+        let sendmail = sendmail::comment_sendmail(minicom);
+        info!("sendmail: {:#?}", sendmail);
     } else {
         let acct_info = accounts::create_account(name.clone(), email.clone());
         let acctid = &acct_info.acctid;
@@ -133,7 +134,8 @@ pub async fn add_comment(f: web::Path<(String, String, String)>) -> impl Respond
             date: datae.to_string(),
         };
         info!("has_account Comment: {:#?}", minicom);
-        let _sendmail = sendmail::comment_sendmail(minicom);
+        let sendmail = sendmail::comment_sendmail(minicom);
+        info!("sendmail: {:#?}", sendmail);
     };
 
     HttpResponse::Ok().body("Comment inserted into db\n")
@@ -218,8 +220,8 @@ pub async fn add_estimate(
             completed: "No".to_string(),
         };
         info!("has_account MailEstimate: {:#?}", mail_est);
-        let _sendmail = sendmail::estimate_sendmail(mail_est);
-        
+        let sendmail = sendmail::estimate_sendmail(mail_est);
+        info!("sendmail: {:#?}", sendmail);
     } else {
         let acct_info = accounts::create_account(name.clone(), email.clone());
         let acctid = &acct_info.acctid;
@@ -246,7 +248,8 @@ pub async fn add_estimate(
             &[&estimate.acctid, &estimate.estid, &estimate.name, &estimate.address, &estimate.city, &estimate.phone, &estimate.email, &estimate.comment, &estimate.intake, &estimate.reqdate, &estimate.completed],
         ).expect("unable to insert estimate");
         info!("Estimate: {:#?}", estimate);
-        let _sendmail = sendmail::estimate_sendmail(estimate);
+        let sendmail = sendmail::estimate_sendmail(estimate);
+        info!("sendmail: {:#?}", sendmail);
     };
     
 
