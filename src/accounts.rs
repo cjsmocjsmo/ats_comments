@@ -4,7 +4,7 @@ use md5::{Digest, Md5};
 use rusqlite::Connection;
 use std::env;
 
-pub fn create_acctid(email: String) -> String {
+pub fn create_hash(email: String) -> String {
     let mut hasher = Md5::new();
     hasher.update(email);
     let result = hasher.finalize();
@@ -14,7 +14,7 @@ pub fn create_acctid(email: String) -> String {
 }
 
 pub fn has_account(email: String) -> bool {
-    let acctid = create_acctid(email.clone());
+    let acctid = create_hash(email.clone());
     let db_path = env::var("COMSERV_ACCT_DB").expect("COMSERV_ACCT_DB not set");
     let conn = Connection::open(db_path.clone()).unwrap();
     let mut stmt = conn
@@ -43,7 +43,7 @@ pub fn has_account(email: String) -> bool {
 }
 
 pub fn create_account(namez: String, emailz: String) -> types::Account {
-    let acct_id = create_acctid(emailz.clone());
+    let acct_id = create_hash(emailz.clone());
     let acct = types::Account {
         acctid: acct_id,
         name: namez,
@@ -63,7 +63,7 @@ pub fn create_account(namez: String, emailz: String) -> types::Account {
 }
 
 pub fn account_info_from_email(email: String) -> Vec<types::Account> {
-    let acctid = create_acctid(email.clone());
+    let acctid = create_hash(email.clone());
     let db_path = env::var("COMSERV_ACCT_DB").expect("COMSERV_ACCT_DB not set");
     let conn = Connection::open(db_path.clone()).unwrap();
     let mut stmt = conn

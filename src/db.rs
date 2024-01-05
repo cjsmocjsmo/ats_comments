@@ -55,8 +55,11 @@ pub fn create_comments_table() -> Result<()> {
         "CREATE TABLE IF NOT EXISTS comments (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             acctid TEXT NOT NULL,
+            comid TEXT NOT NULL,
             comment TEXT NOT NULL,
-            date TEXT NOT NULL
+            date TEXT NOT NULL,
+            accepted TEXT NOT NULL,
+            rejected TEXT NOT NULL
          )",
         (),
     )?;
@@ -80,7 +83,8 @@ pub fn create_estimates_table() -> Result<()> {
             email TEXT NOT NULL,
             comment TEXT NOT NULL,
             intake TEXT NOT NULL,
-            reqdate TEXT NOT NULL
+            reqdate TEXT NOT NULL,
+            completed TEXT NOT NULL
          )",
         (),
     )?;

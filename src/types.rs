@@ -19,6 +19,8 @@ pub struct Auth {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Comment {
     pub acctid: String,
+    pub comid: String,
+    pub email: String,
     pub comment: String,
     pub date: String,
 }
@@ -26,15 +28,33 @@ pub struct Comment {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct FullComment {
     pub acctid: String,
+    pub comid: String,
     pub name: String,
     pub email: String,
     pub comment: String,
     pub date: String,
+    pub accepted: String,
+    pub rejected: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Estimate {
     pub acctid: String,
+    pub estid: String,
+    pub name: String,
+    pub address: String,
+    pub city: String,
+    pub phone: String,
+    pub email: String,
+    pub comment: String,
+    pub intake: String,
+    pub reqdate: String,
+    pub completed: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct MailEstimate {
+    pub estid: String,
     pub name: String,
     pub address: String,
     pub city: String,
