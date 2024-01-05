@@ -77,6 +77,7 @@ pub fn create_estimates_table() -> Result<()> {
         "CREATE TABLE IF NOT EXISTS estimates (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             acctid TEXT NOT NULL,
+            estid TEXT NOT NULL,
             name TEXT NOT NULL,
             address TEXT NOT NULL,
             city TEXT NOT NULL,
