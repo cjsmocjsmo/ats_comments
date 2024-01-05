@@ -22,13 +22,15 @@ fi
 
 if [ -d "/usr/share/ats_comments/uploads" ]; then
     rm -rf "/usr/share/ats_comments/uploads";
+    echo "Removed uploads dir";
 fi 
-echo "Removed uploads dir";
 
-if [ -d "/usr/share/ats_comments/ats_comments/db"]; then
+
+if [ -d "/usr/share/ats_comments/ats_comments/db" ]; then
     rm -rf "/usr/share/ats_comments/ats_comments/db";
+    echo "Removed db dir";
 fi 
-echo "Removed db dir";
+
 
 git pull;
 
