@@ -10,7 +10,6 @@ if [ -d "/usr/share/sendmail/sendmail" ]; then
     git pull;
     go build;
     cd "/usr/share/ats_comments/ats_comments";
-    fi
 fi
 
 if [ ! -d "/usr/share/sendmail/sendmail" ]; then
