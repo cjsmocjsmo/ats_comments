@@ -9,10 +9,7 @@ if [ -d "/usr/share/sendmail" ]; then
     cd /usr/share/sendmail;
     git pull;
     go build;
-    sudo mv -v sendmail /usr/bin/;
-    sudo chown root:root /usr/bin/sendmail;
-    sudo chmod +x /usr/bin/sendmail;
-    cd "/usr/share/ats_comments";
+    cd "/usr/share/ats_comments/ats_comments";
 fi
 
 if [ -d "/usr/share/ats_comments/uploads" ]; then
