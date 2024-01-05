@@ -41,14 +41,13 @@ pub async fn all_comments() -> impl Responder {
     for com in comment_vec {
         let acctidz = &com.acctid;
         let acct_info = accounts::account_info_from_acctid(acctidz.to_string());
-        let name = &acct_info[0].name;
+        // let name = &acct_info[0].name;
         let email = &acct_info[0].email;
         let date = com.date;
 
         let full_comment = types::FullComment {
             acctid: acctidz.to_string(),
             comid: com.comid,
-            name: name.to_string(),
             email: email.to_string(),
             comment: com.comment,
             date: date,
@@ -79,7 +78,6 @@ pub async fn add_comment(f: web::Path<(String, String, String)>) -> impl Respond
         let commet = types::FullComment {
             acctid: acctid.to_string(),
             comid: comidz.clone(),
-            name: name.clone(),
             email: email.clone(),
             comment: comment.clone(),
             date: datae.to_string(),
@@ -91,8 +89,8 @@ pub async fn add_comment(f: web::Path<(String, String, String)>) -> impl Respond
             env::var("COMSERV_COMMENTS_DB").expect("COMSERV_COMMENTS_DB not set");
         let conn = rusqlite::Connection::open(com_serv_comments_db).unwrap();
         conn.execute(
-            "INSERT INTO comments (acctid, comid, name, email, comment, date, accepted, rejected) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)",
-            &[&commet.acctid, &commet.comid, &commet.name, &commet.email, &commet.comment, &commet.date, &commet.accepted, &commet.rejected],
+            "INSERT INTO comments (acctid, comid, email, comment, date, accepted, rejected) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)",
+            &[&commet.acctid, &commet.comid, &commet.email, &commet.comment, &commet.date, &commet.accepted, &commet.rejected],
         )
         .expect("unable to insert comment");
 
@@ -112,7 +110,6 @@ pub async fn add_comment(f: web::Path<(String, String, String)>) -> impl Respond
         let fullcomment = types::FullComment {
             acctid: acctid.to_string(),
             comid: comidz.clone(),
-            name: name.clone(),
             email: email.clone(),
             comment: comment.clone(),
             date: datae.to_string(),
@@ -124,8 +121,8 @@ pub async fn add_comment(f: web::Path<(String, String, String)>) -> impl Respond
             env::var("COMSERV_COMMENTS_DB").expect("COMSERV_COMMENTS_DB not set");
         let conn = rusqlite::Connection::open(com_serv_comments_db).unwrap();
         conn.execute(
-            "INSERT INTO comments (acctid, comid, name, email, comment, date, accepted, rejected) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)",
-            &[&fullcomment.acctid, &fullcomment.comid, &fullcomment.name, &fullcomment.email, &fullcomment.comment, &fullcomment.date, &fullcomment.accepted, &fullcomment.rejected],
+            "INSERT INTO comments (acctid, comid, email, comment, date, accepted, rejected) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)",
+            &[&fullcomment.acctid, &fullcomment.comid, &fullcomment.email, &fullcomment.comment, &fullcomment.date, &fullcomment.accepted, &fullcomment.rejected],
         )
         .expect("unable to insert comment");
         let minicom = types::Comment {

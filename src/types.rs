@@ -29,7 +29,6 @@ pub struct Comment {
 pub struct FullComment {
     pub acctid: String,
     pub comid: String,
-    pub name: String,
     pub email: String,
     pub comment: String,
     pub date: String,
