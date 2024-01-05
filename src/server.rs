@@ -124,7 +124,7 @@ pub async fn add_comment(f: web::Path<(String, String, String)>) -> impl Respond
             env::var("COMSERV_COMMENTS_DB").expect("COMSERV_COMMENTS_DB not set");
         let conn = rusqlite::Connection::open(com_serv_comments_db).unwrap();
         conn.execute(
-            "INSERT INTO comments (acctid, comid, name, email comment, date, accepted, rejected) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)",
+            "INSERT INTO comments (acctid, comid, name, email, comment, date, accepted, rejected) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)",
             &[&fullcomment.acctid, &fullcomment.comid, &fullcomment.name, &fullcomment.email, &fullcomment.comment, &fullcomment.date, &fullcomment.accepted, &fullcomment.rejected],
         )
         .expect("unable to insert comment");
