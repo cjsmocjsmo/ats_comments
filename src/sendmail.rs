@@ -11,7 +11,7 @@ pub fn comment_sendmail(com_info: types::Comment) {
     // println!("comment: {}", comment);
     // let comment_str = format!("'{}'", com_info.comment);
 
-    let output = Command::new("/usr/share/sendmail/sendmail/sendmail")
+    let output = Command::new("/usr/bin/sendmail")
         .arg("-etype")
         .arg("com".to_string())
         .arg("-msgid")
@@ -59,7 +59,7 @@ pub fn estimate_sendmail(esti_info: types::Estimate) {
     let intake = format!("-intake {}", esti_info.intake);
     let reqdate = format!("-reqdate {}", esti_info.reqdate);
 
-    let output = Command::new("/usr/share/sendmail/sendmail/sendmail")
+    let output = Command::new("/usr/bin/sendmail")
         .arg(msgid)
         .arg(name)
         .arg(address)
