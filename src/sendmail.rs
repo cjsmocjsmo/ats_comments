@@ -24,6 +24,8 @@ pub fn comment_sendmail(com_info: types::Comment) {
         .expect("Failed to execute script");
 
     println!("Script output: {}", String::from_utf8_lossy(&output.stdout));
+    println!("Status: {}", output.status);
+    info!("Status: {}", output.status);
 }
 
 pub fn mail_test(com_info: types::Comment) {

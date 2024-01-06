@@ -102,7 +102,7 @@ pub async fn add_comment(f: web::Path<(String, String, String)>) -> impl Respond
             date: datae.to_string(),
         };
         info!("has_account Comment: {:#?}", minicom);
-        let sendmail = sendmail::mail_test(minicom);
+        let sendmail = sendmail::comment_sendmail(minicom);
         info!("sendmail: {:#?}", sendmail);
     } else {
         let acct_info = accounts::create_account(name.clone(), email.clone());
@@ -134,7 +134,7 @@ pub async fn add_comment(f: web::Path<(String, String, String)>) -> impl Respond
             date: datae.to_string(),
         };
         info!("has_account Comment: {:#?}", minicom);
-        let sendmail = sendmail::mail_test(minicom);
+        let sendmail = sendmail::comment_sendmail(minicom);
         info!("sendmail: {:#?}", sendmail);
     };
 
