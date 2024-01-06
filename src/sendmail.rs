@@ -25,6 +25,16 @@ pub fn comment_sendmail(com_info: types::Comment) {
     println!("Script output: {}", String::from_utf8_lossy(&output.stdout));
 }
 
+pub fn test() {
+    let output = Command::new("ls")
+        .arg("-l")
+        .arg("-a")
+        .output()
+        .expect("Failed to execute script");
+
+    println!("Script output: {}", String::from_utf8_lossy(&output.stdout));
+}
+
 pub fn estimate_sendmail(esti_info: types::Estimate) { 
     let msgid = format!("-estid {}", esti_info.estid);
     let name = format!("-name {}", esti_info.name);
