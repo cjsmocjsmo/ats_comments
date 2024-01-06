@@ -13,7 +13,7 @@ pub fn comment_sendmail(com_info: types::Comment) {
 
     let output = Command::new("/usr/share/sendmail/sendmail/sendmail")
         .arg("-etype")
-        .arg("com")
+        .arg("com".to_string())
         .arg("-msgid")
         .arg(com_info.comid)
         .arg("-email")
