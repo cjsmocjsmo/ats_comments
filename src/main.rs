@@ -42,7 +42,7 @@ async fn main() -> std::io::Result<()> {
             .service(server::all_comments)
             .service(server::add_estimate)
             .service(server::all_estimates)
-            // .service(server::mail_test)
+            .service(server::mail_test)
             .service(fs::Files::new("/uploads", uploads_path.clone()).show_files_listing())
     })
     .bind(socket)?
