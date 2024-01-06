@@ -6,7 +6,7 @@ use std::process::Command;
 pub fn comment_sendmail(com_info: types::Comment) {
     let msgid = format!("-msgid {}", com_info.comid);
     let email = format!("-email {}", com_info.email);
-    let comment = format!("-comment {}", com_info.comment);
+    let comment = format!("-comment '{}'", com_info.comment);
     println!("msgid: {}", msgid);
     println!("email: {}", email);
     println!("comment: {}", comment);
@@ -28,7 +28,7 @@ pub fn estimate_sendmail(esti_info: types::Estimate) {
     let city = format!("-city {}", esti_info.city);
     let phone = format!("-phone {}", esti_info.phone);
     let email = format!("-email {}", esti_info.email);
-    let comment = format!("-comment {}", esti_info.comment);
+    let comment = format!("-comment '{}'", esti_info.comment);
     let intake = format!("-intake {}", esti_info.intake);
     let reqdate = format!("-reqdate {}", esti_info.reqdate);
 
