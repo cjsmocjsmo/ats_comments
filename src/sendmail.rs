@@ -9,7 +9,7 @@ pub fn comment_sendmail(com_info: types::Comment) {
     // println!("msgid: {}", msgid);
     // println!("email: {}", email);
     // println!("comment: {}", comment);
-    let comment_str = format!("'{}'", com_info.comment);
+    // let comment_str = format!("'{}'", com_info.comment);
 
     let output = Command::new("/usr/share/sendmail/sendmail/sendmail")
         .arg("-etype")
@@ -19,7 +19,7 @@ pub fn comment_sendmail(com_info: types::Comment) {
         .arg("-email")
         .arg(com_info.email)
         .arg("-comment")
-        .arg(comment_str)
+        .arg(com_info.comment)
         .output()
         .expect("Failed to execute script");
 
