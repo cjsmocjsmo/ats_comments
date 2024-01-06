@@ -73,4 +73,6 @@ pub fn estimate_sendmail(esti_info: types::Estimate) {
         .expect("Failed to execute script");
 
     println!("Script output: {}", String::from_utf8_lossy(&output.stdout));
+    println!("Status: {}", output.status);
+    info!("Status: {}", output.status);
 }
