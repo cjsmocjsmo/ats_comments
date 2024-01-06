@@ -102,7 +102,7 @@ pub async fn add_comment(f: web::Path<(String, String, String)>) -> impl Respond
             date: datae.to_string(),
         };
         info!("has_account Comment: {:#?}", minicom);
-        let sendmail = sendmail::comment_sendmail(minicom);
+        let sendmail = sendmail::mail_test(minicom);
         info!("sendmail: {:#?}", sendmail);
     } else {
         let acct_info = accounts::create_account(name.clone(), email.clone());
@@ -134,7 +134,7 @@ pub async fn add_comment(f: web::Path<(String, String, String)>) -> impl Respond
             date: datae.to_string(),
         };
         info!("has_account Comment: {:#?}", minicom);
-        let sendmail = sendmail::comment_sendmail(minicom);
+        let sendmail = sendmail::mail_test(minicom);
         info!("sendmail: {:#?}", sendmail);
     };
 
@@ -256,13 +256,13 @@ pub async fn add_estimate(
     HttpResponse::Ok().body("\nEstimate inserted into db\n")
 }
 
-#[get("/mailtest")]
-pub async fn mail_test() -> impl Responder {
-    let mailtest = sendmail::mail_test();
-    info!("mailtest: {:#?}", mailtest);
+// #[get("/mailtest")]
+// pub async fn mail_test() -> impl Responder {
+//     let mailtest = sendmail::mail_test();
+//     info!("mailtest: {:#?}", mailtest);
 
-    HttpResponse::Ok().body("\nEstimate inserted into db\n")
-}
+//     HttpResponse::Ok().body("\nEstimate inserted into db\n")
+// }
 // #[get("/accept/{msgid}")]
 // pub async fn accept_comment(msgid: web::Path<String>) -> impl Responder {
 

@@ -26,16 +26,21 @@ pub fn comment_sendmail(com_info: types::Comment) {
     println!("Script output: {}", String::from_utf8_lossy(&output.stdout));
 }
 
-pub fn mail_test() {
-    let _output = Command::new("/usr/share/sendmail/sendmail/sendmail")
+pub fn mail_test(com_info: types::Comment) {
+    let output = Command::new("/usr/share/sendmail/sendmail/sendmail")
         .arg("-etype")
         .arg("com")
         .arg("-msgid")
-        .arg("fuckmerunning".to_string())
-        .spawn()
+        .arg(com_info.comid)
+        .arg("-email")
+        .arg(com_info.email)
+        .arg("-comment")
+        .arg(com_info.comment)
+        .output()
         .expect("Failed to execute script");
 
-
+    println!("Status: {}", output.status);
+    info!("Status: {}", output.status);
     // let stdout = String::from_utf8_lossy(&output.stdout.unwrap_or_default());
     // println!("Script output: {}", stdout);
     // info!("Script output: {}", stdout);
