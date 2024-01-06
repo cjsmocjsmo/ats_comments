@@ -4,17 +4,20 @@ use std::process::Command;
 
 
 pub fn comment_sendmail(com_info: types::Comment) {
-    let msgid = format!("-msgid {}", com_info.comid);
-    let email = format!("-email {}", com_info.email);
-    let comment = format!("-comment '{}'", com_info.comment);
-    println!("msgid: {}", msgid);
-    println!("email: {}", email);
-    println!("comment: {}", comment);
+    // let msgid = format!("-msgid {}", com_info.comid);
+    // let email = format!("-email {}", com_info.email);
+    // let comment = format!("-comment '{}'", com_info.comment);
+    // println!("msgid: {}", msgid);
+    // println!("email: {}", email);
+    // println!("comment: {}", comment);
 
     let output = Command::new("/usr/share/sendmail/sendmail/sendmail")
-        .arg(msgid)
-        .arg(email)
-        .arg(comment)
+        .arg("-msgid")
+        .arg(com_info.comid)
+        .arg("-email")
+        .arg(com_info.email)
+        .arg("-comment")
+        .arg(com_info.comment)
         .output()
         .expect("Failed to execute script");
 
