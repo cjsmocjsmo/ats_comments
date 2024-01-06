@@ -25,7 +25,7 @@ pub fn comment_sendmail(com_info: types::Comment) {
     println!("Script output: {}", String::from_utf8_lossy(&output.stdout));
 }
 
-pub fn test() {
+pub fn mail_test() {
     let output = Command::new("ls")
         .arg("-l")
         .arg("-a")

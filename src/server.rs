@@ -256,7 +256,12 @@ pub async fn add_estimate(
     HttpResponse::Ok().body("\nEstimate inserted into db\n")
 }
 
+#[get("/mailtest")]
+pub async fn mail_test() -> impl Responder {
+    let _mailtest = sendmail::mail_test();
 
+    HttpResponse::Ok().body("\nEstimate inserted into db\n")
+}
 // #[get("/accept/{msgid}")]
 // pub async fn accept_comment(msgid: web::Path<String>) -> impl Responder {
 
