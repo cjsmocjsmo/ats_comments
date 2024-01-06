@@ -7,6 +7,9 @@ pub fn comment_sendmail(com_info: types::Comment) {
     let msgid = format!("-msgid {}", com_info.comid);
     let email = format!("-email {}", com_info.email);
     let comment = format!("-comment {}", com_info.comment);
+    println!("msgid: {}", msgid);
+    println!("email: {}", email);
+    println!("comment: {}", comment);
 
     let output = Command::new("/usr/share/sendmail/sendmail/sendmail")
         .arg(msgid)
