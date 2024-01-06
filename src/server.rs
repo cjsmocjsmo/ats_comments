@@ -257,20 +257,20 @@ pub async fn add_estimate(
 }
 
 
-#[get("/accept/{msgid}")]
-pub async fn accept_comment(msgid: web::Path<String>) -> impl Responder {
+// #[get("/accept/{msgid}")]
+// pub async fn accept_comment(msgid: web::Path<String>) -> impl Responder {
 
-    HttpResponse::Ok().body("\nEstimate inserted into db\n")
-}
+//     HttpResponse::Ok().body("\nEstimate inserted into db\n")
+// }
 
-#[get("/reject/{msgid}")]
-pub async fn reject_comment(msgid: web::Path<String>) -> impl Responder {
+// #[get("/reject/{msgid}")]
+// pub async fn reject_comment(msgid: web::Path<String>) -> impl Responder {
 
-    HttpResponse::Ok().body("\nEstimate inserted into db\n")
-}
+//     HttpResponse::Ok().body("\nEstimate inserted into db\n")
+// }
 
-#[get("/completed/{msgid}")]
-pub async fn esti_complete(msgid: web::Path<String>) -> impl Responder {
+// #[get("/completed/{msgid}")]
+// pub async fn esti_complete(msgid: web::Path<String>) -> impl Responder {
 
-    HttpResponse::Ok().body("\nEstimate inserted into db\n")
-}
+//     HttpResponse::Ok().body("\nEstimate inserted into db\n")
+// }
