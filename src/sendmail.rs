@@ -1,7 +1,6 @@
 use crate::types;
-use std::process::Command;
 use log::info;
-
+use std::process::Command;
 
 pub fn comment_sendmail(com_info: types::Comment) {
     // let msgid = format!("-msgid {}", com_info.comid);
@@ -13,6 +12,8 @@ pub fn comment_sendmail(com_info: types::Comment) {
     let comment_str = format!("'{}'", com_info.comment);
 
     let output = Command::new("/usr/share/sendmail/sendmail/sendmail")
+        .arg("-etype")
+        .arg("com")
         .arg("-msgid")
         .arg(com_info.comid)
         .arg("-email")
@@ -26,9 +27,11 @@ pub fn comment_sendmail(com_info: types::Comment) {
 }
 
 pub fn mail_test() {
-    let output = Command::new("ls")
-        .arg("-l")
-        .arg("-a")
+    let output = Command::new("/usr/share/sendmail/sendmail/sendmail")
+        .arg("-etype")
+        .arg("com")
+        .arg("-msgid")
+        .arg("fuckmerunning".to_string())
         .output()
         .expect("Failed to execute script");
 
@@ -36,7 +39,7 @@ pub fn mail_test() {
     info!("Script output: {}", String::from_utf8_lossy(&output.stdout));
 }
 
-pub fn estimate_sendmail(esti_info: types::Estimate) { 
+pub fn estimate_sendmail(esti_info: types::Estimate) {
     let msgid = format!("-estid {}", esti_info.estid);
     let name = format!("-name {}", esti_info.name);
     let address = format!("-address {}", esti_info.email);
@@ -60,9 +63,5 @@ pub fn estimate_sendmail(esti_info: types::Estimate) {
         .output()
         .expect("Failed to execute script");
 
-
     println!("Script output: {}", String::from_utf8_lossy(&output.stdout));
 }
-
-
-
