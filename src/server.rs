@@ -258,7 +258,8 @@ pub async fn add_estimate(
 
 #[get("/mailtest")]
 pub async fn mail_test() -> impl Responder {
-    let _mailtest = sendmail::mail_test();
+    let mailtest = sendmail::mail_test();
+    info!("mailtest: {:#?}", mailtest);
 
     HttpResponse::Ok().body("\nEstimate inserted into db\n")
 }
