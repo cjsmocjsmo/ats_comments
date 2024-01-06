@@ -1,6 +1,6 @@
 use crate::types;
 use std::process::Command;
-
+use log::info;
 
 
 pub fn comment_sendmail(com_info: types::Comment) {
@@ -33,6 +33,7 @@ pub fn mail_test() {
         .expect("Failed to execute script");
 
     println!("Script output: {}", String::from_utf8_lossy(&output.stdout));
+    info!("Script output: {}", String::from_utf8_lossy(&output.stdout));
 }
 
 pub fn estimate_sendmail(esti_info: types::Estimate) { 
