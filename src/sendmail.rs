@@ -27,16 +27,18 @@ pub fn comment_sendmail(com_info: types::Comment) {
 }
 
 pub fn mail_test() {
-    let output = Command::new("/usr/share/sendmail/sendmail/sendmail")
+    let _output = Command::new("/usr/share/sendmail/sendmail/sendmail")
         .arg("-etype")
         .arg("com")
         .arg("-msgid")
         .arg("fuckmerunning".to_string())
-        .output()
+        .spawn()
         .expect("Failed to execute script");
 
-    println!("Script output: {}", String::from_utf8_lossy(&output.stdout));
-    info!("Script output: {}", String::from_utf8_lossy(&output.stdout));
+
+    // let stdout = String::from_utf8_lossy(&output.stdout.unwrap_or_default());
+    // println!("Script output: {}", stdout);
+    // info!("Script output: {}", stdout);
 }
 
 pub fn estimate_sendmail(esti_info: types::Estimate) {
