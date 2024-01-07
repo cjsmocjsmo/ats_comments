@@ -9,7 +9,7 @@ pub mod accounts;
 pub mod db;
 pub mod envvars;
 pub mod functions;
-pub mod sendmail;
+// pub mod sendmail;
 pub mod server;
 pub mod types;
 

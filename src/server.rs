@@ -1,5 +1,5 @@
 use crate::accounts;
-use crate::sendmail;
+// use crate::sendmail;
 use crate::types;
 use actix_web::{get, web, HttpResponse, Responder};
 use chrono::prelude::*;
@@ -94,16 +94,16 @@ pub async fn add_comment(f: web::Path<(String, String, String)>) -> impl Respond
         )
         .expect("unable to insert comment");
 
-        let minicom = types::Comment {
-            acctid: acctid.to_string(),
-            comid: comidz.clone(),
-            email: email.clone(),
-            comment: comment.clone(),
-            date: datae.to_string(),
-        };
-        info!("has_account Comment: {:#?}", minicom);
-        let sendmail = sendmail::comment_sendmail(minicom);
-        info!("sendmail: {:#?}", sendmail);
+        // let minicom = types::Comment {
+        //     acctid: acctid.to_string(),
+        //     comid: comidz.clone(),
+        //     email: email.clone(),
+        //     comment: comment.clone(),
+        //     date: datae.to_string(),
+        // };
+        // info!("has_account Comment: {:#?}", minicom);
+        // let sendmail = sendmail::comment_sendmail(minicom);
+        // info!("sendmail: {:#?}", sendmail);
     } else {
         let acct_info = accounts::create_account(name.clone(), email.clone());
         let acctid = &acct_info.acctid;
@@ -126,16 +126,16 @@ pub async fn add_comment(f: web::Path<(String, String, String)>) -> impl Respond
             &[&fullcomment.acctid, &fullcomment.comid, &fullcomment.email, &fullcomment.comment, &fullcomment.date, &fullcomment.accepted, &fullcomment.rejected],
         )
         .expect("unable to insert comment");
-        let minicom = types::Comment {
-            acctid: acctid.to_string(),
-            comid: comidz.clone(),
-            email: email.clone(),
-            comment: comment.clone(),
-            date: datae.to_string(),
-        };
-        info!("has_account Comment: {:#?}", minicom);
-        let sendmail = sendmail::comment_sendmail(minicom);
-        info!("sendmail: {:#?}", sendmail);
+        // let minicom = types::Comment {
+        //     acctid: acctid.to_string(),
+        //     comid: comidz.clone(),
+        //     email: email.clone(),
+        //     comment: comment.clone(),
+        //     date: datae.to_string(),
+        // };
+        // info!("has_account Comment: {:#?}", minicom);
+        // let sendmail = sendmail::comment_sendmail(minicom);
+        // info!("sendmail: {:#?}", sendmail);
     };
 
     HttpResponse::Ok().body("Comment inserted into db\n")
@@ -206,22 +206,22 @@ pub async fn add_estimate(
             &[&estimate.acctid, &estimate.estid, &estimate.name, &estimate.address, &estimate.city, &estimate.phone, &estimate.email, &estimate.comment, &estimate.intake, &estimate.reqdate, &estimate.completed],
         )
         .expect("unable to insert estimate");
-        let mail_est = types::Estimate {
-            acctid: acctid.to_string(),
-            estid: estidz.clone(),
-            name: name.clone(),
-            address: address.clone(),
-            city: city.clone(),
-            phone: phone.clone(),
-            email: email.clone(),
-            comment: comment.clone(),
-            intake: today.clone(),
-            reqdate: reqdate.clone(),
-            completed: "No".to_string(),
-        };
-        info!("has_account MailEstimate: {:#?}", mail_est);
-        let sendmail = sendmail::estimate_sendmail(mail_est);
-        info!("sendmail: {:#?}", sendmail);
+        // let mail_est = types::Estimate {
+        //     acctid: acctid.to_string(),
+        //     estid: estidz.clone(),
+        //     name: name.clone(),
+        //     address: address.clone(),
+        //     city: city.clone(),
+        //     phone: phone.clone(),
+        //     email: email.clone(),
+        //     comment: comment.clone(),
+        //     intake: today.clone(),
+        //     reqdate: reqdate.clone(),
+        //     completed: "No".to_string(),
+        // };
+        // info!("has_account MailEstimate: {:#?}", mail_est);
+        // let sendmail = sendmail::estimate_sendmail(mail_est);
+        // info!("sendmail: {:#?}", sendmail);
     } else {
         let acct_info = accounts::create_account(name.clone(), email.clone());
         let acctid = &acct_info.acctid;
@@ -247,36 +247,58 @@ pub async fn add_estimate(
             "INSERT INTO estimates (acctid, estid, name, address, city, phone, email, comment, intake, reqdate, completed) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11)",
             &[&estimate.acctid, &estimate.estid, &estimate.name, &estimate.address, &estimate.city, &estimate.phone, &estimate.email, &estimate.comment, &estimate.intake, &estimate.reqdate, &estimate.completed],
         ).expect("unable to insert estimate");
-        info!("Estimate: {:#?}", estimate);
-        let sendmail = sendmail::estimate_sendmail(estimate);
-        info!("sendmail: {:#?}", sendmail);
+        // info!("Estimate: {:#?}", estimate);
+        // let sendmail = sendmail::estimate_sendmail(estimate);
+        // info!("sendmail: {:#?}", sendmail);
     };
-    
 
     HttpResponse::Ok().body("\nEstimate inserted into db\n")
 }
 
-// #[get("/mailtest")]
-// pub async fn mail_test() -> impl Responder {
-//     let mailtest = sendmail::mail_test();
-//     info!("mailtest: {:#?}", mailtest);
+#[get("/accept/{msgid}")]
+pub async fn accept_comment(id: web::Path<String>) -> impl Responder {
+    let msgid = id.into_inner();
+    let todays_date = Local::now().format("%Y-%m-%d").to_string();
+    let com_serv_comments_db =
+        env::var("COMSERV_COMMENTS_DB").expect("COMSERV_COMMENTS_DB not set");
+    let conn = rusqlite::Connection::open(com_serv_comments_db).unwrap();
+    conn.execute(
+        "UPDATE comments SET accepted = ?1 WHERE comid = ?2",
+        &[&todays_date, &msgid],
+    )
+    .expect("unable to update comment");
 
-//     HttpResponse::Ok().body("\nEstimate inserted into db\n")
-// }
-// #[get("/accept/{msgid}")]
-// pub async fn accept_comment(msgid: web::Path<String>) -> impl Responder {
+    HttpResponse::Ok().body("\nComment Accepted\n")
+}
 
-//     HttpResponse::Ok().body("\nEstimate inserted into db\n")
-// }
+#[get("/reject/{msgid}")]
+pub async fn reject_comment(id: web::Path<String>) -> impl Responder {
+    let msgid = id.into_inner();
+    let todays_date = Local::now().format("%Y-%m-%d").to_string();
+    let com_serv_comments_db =
+        env::var("COMSERV_COMMENTS_DB").expect("COMSERV_COMMENTS_DB not set");
+    let conn = rusqlite::Connection::open(com_serv_comments_db).unwrap();
+    conn.execute(
+        "UPDATE comments SET rejected = ?1 WHERE comid = ?2",
+        &[&todays_date, &msgid],
+    )
+    .expect("unable to update comment");
 
-// #[get("/reject/{msgid}")]
-// pub async fn reject_comment(msgid: web::Path<String>) -> impl Responder {
+    HttpResponse::Ok().body("\nComment Rejected\n")
+}
 
-//     HttpResponse::Ok().body("\nEstimate inserted into db\n")
-// }
+#[get("/completed/{msgid}")]
+pub async fn esti_complete(id: web::Path<String>) -> impl Responder {
+    let msgid = id.into_inner();
+    let todays_date = Local::now().format("%Y-%m-%d").to_string();
+    let com_serv_estimates_db =
+        env::var("COMSERV_ESTIMATES_DB").expect("COMSERV_ESTIMATES_DB not set");
+    let conn = rusqlite::Connection::open(com_serv_estimates_db).unwrap();
+    conn.execute(
+        "UPDATE estimates SET completed = ?1 WHERE estid = ?2",
+        &[&todays_date, &msgid],
+    )
+    .expect("unable to update estimate");
 
-// #[get("/completed/{msgid}")]
-// pub async fn esti_complete(msgid: web::Path<String>) -> impl Responder {
-
-//     HttpResponse::Ok().body("\nEstimate inserted into db\n")
-// }
+    HttpResponse::Ok().body("\nEstimate Completed\n")
+}
