@@ -4,12 +4,12 @@ curl http://192.168.0.91:8181/addcom/Herman%20Munster/herman@monster.com/this%20
 
 curl http://192.168.0.91:8181/addcom/casper/casper@monster.com/this%20is%20another%20commit%20from%20casper;
 
-# curl http://192.168.0.91:8181/allcom;
+curl http://192.168.0.91:8181/allcom;
 
-# curl http://192.168.0.91:8181/addesti/foo%20bar/814%20Hull%20Ave/Port@20Orchard/903-465-7811/foo@gmail.com/01-02-2023/01-22-2023;
+curl http://192.168.0.91:8181/addesti/foo%20bar/814%20Hull%20Ave/Port@20Orchard/903-465-7811/foo@gmail.com/01-02-2023/01-22-2023;
 
-# curl http://192.168.0.91:8181/allesti;
-# 
+curl http://192.168.0.91:8181/allesti;
+
 # curl http://192.168.0.91:8181/addcom/Herman Munster/herman@monster.com/this is the first comment lets see if it works;
 
 
