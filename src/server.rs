@@ -267,7 +267,7 @@ pub async fn accept_comment(id: web::Path<String>) -> impl Responder {
     let conn = rusqlite::Connection::open(com_serv_comments_db).unwrap();
     conn.execute(
         "UPDATE comments SET accepted = ?1 WHERE comid = ?2",
-        &[&todays_date, &msgid],
+        &[&todays_date, &idz],
     )
     .expect("unable to update comment");
 
@@ -286,7 +286,7 @@ pub async fn reject_comment(id: web::Path<String>) -> impl Responder {
     let conn = rusqlite::Connection::open(com_serv_comments_db).unwrap();
     conn.execute(
         "UPDATE comments SET rejected = ?1 WHERE comid = ?2",
-        &[&todays_date, &msgid],
+        &[&todays_date, &idz],
     )
     .expect("unable to update comment");
 
