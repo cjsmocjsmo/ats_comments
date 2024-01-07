@@ -264,7 +264,7 @@ pub async fn accept_comment(id: web::Path<String>) -> impl Responder {
         env::var("COMSERV_COMMENTS_DB").expect("COMSERV_COMMENTS_DB not set");
     let conn = rusqlite::Connection::open(com_serv_comments_db).unwrap();
     conn.execute(
-        "UPDATE comments SET accepted = ?1 WHERE comid = '?2'",
+        "UPDATE comments SET accepted = ?1 WHERE comid = ?2",
         &[&todays_date, &msgid],
     )
     .expect("unable to update comment");
