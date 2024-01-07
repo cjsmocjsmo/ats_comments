@@ -25,40 +25,44 @@ pub async fn all_comments() -> impl Responder {
         let email = row.get(3).unwrap();
         let commentz: String = row.get(4).unwrap();
         let datez = row.get(5).unwrap();
+        let acceptedz = row.get(6).unwrap();
+        let rejectedz = row.get(7).unwrap();
 
-        let comment = types::Comment {
+        let comment = types::FullComment {
             acctid: acctidz,
             comid: comidz,
             email: email,
             comment: commentz.clone(),
             date: datez,
+            accepted: acceptedz,
+            rejected: rejectedz,
         };
         info!("Comment: {:?}", comment);
         comment_vec.push(comment);
     }
 
-    let mut fullcomvec = Vec::new();
-    for com in comment_vec {
-        let acctidz = &com.acctid;
-        let acct_info = accounts::account_info_from_acctid(acctidz.to_string());
-        // let name = &acct_info[0].name;
-        let email = &acct_info[0].email;
-        let date = com.date;
+    // let mut fullcomvec = Vec::new();
+    // for com in comment_vec {
+    //     let acctidz = &com.acctid;
+    //     let acct_info = accounts::account_info_from_acctid(acctidz.to_string());
+    //     // let name = &acct_info[0].name;
+    //     let email = &acct_info[0].email;
+    //     let date = com.date;
 
-        let full_comment = types::FullComment {
-            acctid: acctidz.to_string(),
-            comid: com.comid,
-            email: email.to_string(),
-            comment: com.comment,
-            date: date,
-            accepted: "None".to_string(),
-            rejected: "None".to_string(),
-        };
-        info!("Full Comment: {:#?}", full_comment);
-        fullcomvec.push(full_comment);
-    }
+    //     let full_comment = types::FullComment {
+    //         acctid: acctidz.to_string(),
+    //         comid: com.comid,
+    //         email: email.to_string(),
+    //         comment: com.comment,
+    //         date: date,
+    //         accepted: "None".to_string(),
+    //         rejected: "None".to_string(),
+    //     };
+    //     info!("Full Comment: {:#?}", full_comment);
+    //     fullcomvec.push(full_comment);
+    // }
 
-    let fullcomvec_str = serde_json::to_string(&fullcomvec).unwrap();
+    let fullcomvec_str = serde_json::to_string(&comment_vec).unwrap();
 
     HttpResponse::Ok().body(format!("{:#?}", fullcomvec_str))
 }
