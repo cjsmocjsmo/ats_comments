@@ -260,6 +260,8 @@ pub async fn accept_comment(id: web::Path<String>) -> impl Responder {
     let idz = id.into_inner();
     let msgid = format!("'{}'", idz);
     let todays_date = Local::now().format("%Y-%m-%d").to_string();
+    info!("msgid: {:#?}", msgid);
+    info!("todays_date: {:#?}", todays_date);
     let com_serv_comments_db =
         env::var("COMSERV_COMMENTS_DB").expect("COMSERV_COMMENTS_DB not set");
     let conn = rusqlite::Connection::open(com_serv_comments_db).unwrap();
@@ -269,7 +271,7 @@ pub async fn accept_comment(id: web::Path<String>) -> impl Responder {
     )
     .expect("unable to update comment");
 
-    HttpResponse::Ok().body("\nComment Accepted\n")
+    HttpResponse::Ok().body("\nComment Updated\n")
 }
 
 #[get("/reject/{msgid}")]
@@ -277,6 +279,8 @@ pub async fn reject_comment(id: web::Path<String>) -> impl Responder {
     let idz = id.into_inner();
     let msgid = format!("'{}'", idz);
     let todays_date = Local::now().format("%Y-%m-%d").to_string();
+    info!("msgid: {:#?}", msgid);
+    info!("todays_date: {:#?}", todays_date);
     let com_serv_comments_db =
         env::var("COMSERV_COMMENTS_DB").expect("COMSERV_COMMENTS_DB not set");
     let conn = rusqlite::Connection::open(com_serv_comments_db).unwrap();
