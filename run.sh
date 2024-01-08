@@ -24,7 +24,7 @@ git pull;
 # RUST_LOG=info cargo run --release;
 cargo build --release;
 
-ATSCOMMENTS = "./target/release/ats_comments";
+ATSCOMMENTS = "~/ats_comments/target/release/ats_comments";
 
 if [ ! -f /usr/bin/ats_comments ]; then
     sudo mv -v $ATSCOMMENTS /usr/bin/;
