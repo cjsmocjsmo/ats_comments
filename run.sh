@@ -24,10 +24,10 @@ git pull;
 # RUST_LOG=info cargo run --release;
 cargo build --release;
 
-ATSCOMMENTS = "~/ats_comments/target/release/ats_comments";
+ATSCOMMENTS="~/ats_comments/target/release/ats_comments";
 
 if [ ! -f /usr/bin/ats_comments ]; then
-    sudo mv -v $ATSCOMMENTS /usr/bin/;
+    sudo mv -v $ATSCOMMENTS /usr/bin/ats_comments;
     sudo chown root:root /usr/bin/ats_comments;
     sudo chmod +x /usr/bin/ats_comments;
     echo "Installed ats_comments";
@@ -35,7 +35,7 @@ fi
 
 if [ -f /usr/bin/ats_comments ]; then
     sudo rm /usr/bin/ats_comments;
-    sudo cp -pvr $ATSCOMMENTS /usr/bin/;
+    sudo cp -pvr $ATSCOMMENTS /usr/bin/ats_comments;
     sudo chown root:root /usr/bin/ats_comments;
     sudo chmod +x /usr/bin/ats_comments;
     echo "Updated ats_comments";
