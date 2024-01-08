@@ -1,23 +1,10 @@
 #!/bin/bash
 
-if [ ! -d "/usr/share/sendmail" ]; then
-    echo "Install sendmail";
-    exit 1;
-fi
-
-if [ -d "/usr/share/sendmail/sendmail" ]; then
-    cd /usr/share/sendmail/sendmail;
-    git pull;
-    go build;
-    cd "/usr/share/ats_comments/ats_comments";
-fi
-
-if [ ! -d "/usr/share/sendmail/sendmail" ]; then
-    cd "/usr/share/sendmail";
-    git clone "https://github.com/cjsmocjsmo/sendmail.git";
-    cd "/usr/share/sendmail/sendmail";
-    go build;
-    cd "/usr/share/ats_comments/ats_comments";
+if [ ! -d "/usr/share/ats_comments" ]; then
+    sudo mkdir -p "/usr/share/ats_comments";
+    sudo chown -R $USER:$USER "/usr/share/ats_comments";
+    sudo chmod -R 755 "/usr/share/ats_comments";
+    echo "Created dir";
 fi
 
 if [ -d "/usr/share/ats_comments/uploads" ]; then
@@ -34,29 +21,31 @@ fi
 
 git pull;
 
-RUST_LOG=info cargo run --release;
-# cargo build --release;
+# RUST_LOG=info cargo run --release;
+cargo build --release;
 
-# ATSCOMMENTS = "/usr/share/ats_comments/ats_comments/target/release/ats_comments";
+ATSCOMMENTS = "/usr/share/ats_comments/ats_comments/target/release/ats_comments";
 
-# if [ ! -f /usr/bin/ats_comments ]; then
-#     sudo cp -pvr $ATSCOMMENTS /usr/bin/;
-#     sudo chown root:root /usr/bin/ats_comments;
-#     sudo chmod +x /usr/bin/ats_comments;
-# fi
+if [ ! -f /usr/bin/ats_comments ]; then
+    sudo cp -pvr $ATSCOMMENTS /usr/bin/;
+    sudo chown root:root /usr/bin/ats_comments;
+    sudo chmod +x /usr/bin/ats_comments;
+fi
 
-# if [ -f /usr/bin/ats_comments ]; then
-#     sudo rm /usr/bin/ats_comments;
-#     sudo cp -pvr $ATSCOMMENTS /usr/bin/;
-#     sudo chown root:root /usr/bin/ats_comments;
-#     sudo chmod +x /usr/bin/ats_comments;
-# fi
+if [ -f /usr/bin/ats_comments ]; then
+    sudo rm /usr/bin/ats_comments;
+    sudo cp -pvr $ATSCOMMENTS /usr/bin/;
+    sudo chown root:root /usr/bin/ats_comments;
+    sudo chmod +x /usr/bin/ats_comments;
+fi
 
-# SYSD="/etc/systemd/system/";
-# SERVFILE="/usr/share/ats_comments/ats_comments/ats_comments.service";
-# if [ ! -f $SYSD"/ats_comments.service" ]; then
-#     sudo cp -pvr $SERVFILE $SYSD;
-# fi 
+SYSD="/etc/systemd/system/";
+SERVFILE="/usr/share/ats_comments/ats_comments/ats_comments.service";
+if [ ! -f $SYSD"/ats_comments.service" ]; then
+    sudo cp -pvr $SERVFILE $SYSD;
+    sudo chown root:root $SYSD"ats_comments.service";
+    sudo chmod 644 $SYSD"ats_comments.service";
+fi 
 
 # sudo systemctl start ats_comments.service;
 # sudo systemctl enable ats_comments.service
