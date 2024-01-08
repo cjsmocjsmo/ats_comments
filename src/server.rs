@@ -261,8 +261,7 @@ pub async fn add_estimate(
 
 #[get("/accept/{msgid}")]
 pub async fn accept_comment(id: web::Path<String>) -> impl Responder {
-    let idz = id.into_inner();
-    let msgid = format!("'{}'", idz);
+    let msgid = id.into_inner();
     let todays_date = Local::now().format("%Y-%m-%d").to_string();
     info!("msgid: {:#?}", msgid);
     info!("todays_date: {:#?}", todays_date);
@@ -271,7 +270,7 @@ pub async fn accept_comment(id: web::Path<String>) -> impl Responder {
     let conn = rusqlite::Connection::open(com_serv_comments_db).unwrap();
     conn.execute(
         "UPDATE comments SET accepted = ?1 WHERE comid = ?2",
-        &[&todays_date, &idz],
+        &[&todays_date, &msgid],
     )
     .expect("unable to update comment");
 
@@ -280,8 +279,7 @@ pub async fn accept_comment(id: web::Path<String>) -> impl Responder {
 
 #[get("/reject/{msgid}")]
 pub async fn reject_comment(id: web::Path<String>) -> impl Responder {
-    let idz = id.into_inner();
-    let msgid = format!("'{}'", idz);
+    let msgid = id.into_inner();
     let todays_date = Local::now().format("%Y-%m-%d").to_string();
     info!("msgid: {:#?}", msgid);
     info!("todays_date: {:#?}", todays_date);
@@ -290,7 +288,7 @@ pub async fn reject_comment(id: web::Path<String>) -> impl Responder {
     let conn = rusqlite::Connection::open(com_serv_comments_db).unwrap();
     conn.execute(
         "UPDATE comments SET rejected = ?1 WHERE comid = ?2",
-        &[&todays_date, &idz],
+        &[&todays_date, &msgid],
     )
     .expect("unable to update comment");
 
