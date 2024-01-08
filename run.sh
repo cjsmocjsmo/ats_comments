@@ -30,6 +30,7 @@ if [ ! -f /usr/bin/ats_comments ]; then
     sudo mv -v $ATSCOMMENTS /usr/bin/;
     sudo chown root:root /usr/bin/ats_comments;
     sudo chmod +x /usr/bin/ats_comments;
+    echo "Installed ats_comments";
 fi
 
 if [ -f /usr/bin/ats_comments ]; then
@@ -37,6 +38,7 @@ if [ -f /usr/bin/ats_comments ]; then
     sudo cp -pvr $ATSCOMMENTS /usr/bin/;
     sudo chown root:root /usr/bin/ats_comments;
     sudo chmod +x /usr/bin/ats_comments;
+    echo "Updated ats_comments";
 fi
 
 SYSD="/etc/systemd/system/";
@@ -45,6 +47,7 @@ if [ ! -f $SYSD"/ats_comments.service" ]; then
     sudo cp -pvr $SERVFILE $SYSD;
     sudo chown root:root $SYSD"ats_comments.service";
     sudo chmod 644 $SYSD"ats_comments.service";
+    echo "Installed ats_comments.service";
 fi 
 
 # sudo systemctl start ats_comments.service;
