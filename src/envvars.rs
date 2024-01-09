@@ -6,7 +6,7 @@ pub fn set_env_vars() {
     if key_pem.is_err() {
         env::set_var(
             "COMSERV_KEY_PEM",
-            "/etc/letsencrypt/live/atstest.xyz/privkey.pem",
+            "/etc/letsencrypt/archive/atstest.xyz/privkey1.pem",
         );
     };
 
@@ -14,7 +14,7 @@ pub fn set_env_vars() {
     if cert_pem.is_err() {
         env::set_var(
             "COMSERV_CERT_PEM",
-            "/etc/letsencrypt/live/atstest.xyz/fullchain.pem",
+            "/etc/letsencrypt/archive/atstest.xyz/fullchain1.pem",
         );
     };
     
