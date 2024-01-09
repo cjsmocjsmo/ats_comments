@@ -4,10 +4,12 @@ use actix_web::{App, HttpServer};
 use env_logger;
 use log::info;
 use std::env;
-// use std::io::BufReader;
-// use std::fs::File;
-use openssl::ssl::{SslAcceptor, SslMethod};
-
+use std::io::Read;
+use std::fs::File;
+use openssl::{
+    pkey::{PKey, Private},
+    ssl::{SslAcceptor, SslMethod},
+};
 
 pub mod accounts;
 pub mod db;
@@ -38,7 +40,8 @@ async fn main() -> std::io::Result<()> {
     let mut builder = SslAcceptor::mozilla_intermediate(SslMethod::tls()).unwrap();
 
     builder
-        .set_private_key_file(key_file_path, openssl::ssl::SslFiletype::PEM).unwrap();
+        .set_private_key(&load_encrypted_private_key(key_file_path))
+        .unwrap();
 
     builder
         .set_certificate_chain_file(cert_file_path).unwrap();
@@ -76,3 +79,10 @@ async fn main() -> std::io::Result<()> {
 
 }
 
+fn load_encrypted_private_key(key_path: String) -> PKey<Private> {
+    let mut file = File::open(key_path).unwrap();
+    let mut buffer = Vec::new();
+    file.read_to_end(&mut buffer).expect("Failed to read file");
+
+    PKey::private_key_from_pem_passphrase(&buffer, b"password").unwrap()
+}
