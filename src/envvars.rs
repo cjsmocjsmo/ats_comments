@@ -62,17 +62,17 @@ pub fn set_env_vars() {
 
     let comserv_raw_http = env::var("COMSERV_RAW_HTTP");
     if comserv_raw_http.is_err() {
-        env::set_var("COMSERV_RAW_HTTP", "10.138.0.5");
+        env::set_var("COMSERV_RAW_HTTP", "127.0.0.1");
     };
 
     let comserv_http = env::var("COMSERV_HTTP_ADDR");
     if comserv_http.is_err() {
-        env::set_var("COMSERV_HTTP_ADDR", "https://10.138.0.5");
+        env::set_var("COMSERV_HTTP_ADDR", "https://127.0.0.1");
     };
 
     let comserv_port = env::var("COMSERV_PORT");
     if comserv_port.is_err() {
-        env::set_var("COMSERV_PORT", "80");
+        env::set_var("COMSERV_PORT", "8080");
     };
 
     info!("Environment variables set")
