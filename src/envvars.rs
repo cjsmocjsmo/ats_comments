@@ -72,7 +72,7 @@ pub fn set_env_vars() {
 
     let comserv_port = env::var("COMSERV_PORT");
     if comserv_port.is_err() {
-        env::set_var("COMSERV_PORT", "443");
+        env::set_var("COMSERV_PORT", "80");
     };
 
     info!("Environment variables set")
