@@ -73,7 +73,7 @@ async fn main() -> std::io::Result<()> {
             .service(server::esti_complete)
             .service(fs::Files::new("/uploads", uploads_path.clone()).show_files_listing())
     })
-    .bind_openssl("0.0.0.0:8080", builder)?
+    .bind_openssl("0.0.0.0:443", builder)?
     .run()
     .await
 
