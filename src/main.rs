@@ -32,7 +32,7 @@ async fn main() -> std::io::Result<()> {
     }
 
     let uploads_path = env::var("COMSERV_UPLOADS").unwrap();
-    let socket = functions::gen_server_addr();
+    // let socket = functions::gen_server_addr();
 
     let key_file_path = env::var("COMSERV_KEY_PEM").unwrap();
     let cert_file_path = env::var("COMSERV_CERT_PEM").unwrap();
@@ -73,7 +73,7 @@ async fn main() -> std::io::Result<()> {
             .service(server::esti_complete)
             .service(fs::Files::new("/uploads", uploads_path.clone()).show_files_listing())
     })
-    .bind_openssl(socket, builder)?
+    .bind_openssl("0.0.0.0:8080", builder)?
     .run()
     .await
 
