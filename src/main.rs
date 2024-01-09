@@ -3,8 +3,11 @@ use actix_files as fs;
 use actix_web::{App, HttpServer};
 use env_logger;
 use log::info;
-use openssl::ssl::{SslAcceptor, SslFiletype, SslMethod};
 use std::env;
+// use std::io::BufReader;
+// use std::fs::File;
+use openssl::ssl::{SslAcceptor, SslMethod};
+
 
 pub mod accounts;
 pub mod db;
@@ -16,6 +19,7 @@ pub mod types;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+ 
     env_logger::init();
     let _vars = envvars::set_env_vars();
 
@@ -28,16 +32,24 @@ async fn main() -> std::io::Result<()> {
     let uploads_path = env::var("COMSERV_UPLOADS").unwrap();
     let socket = functions::gen_server_addr();
 
+    let key_file_path = env::var("COMSERV_KEY_PEM").unwrap();
+    let cert_file_path = env::var("COMSERV_CERT_PEM").unwrap();
+
     let mut builder = SslAcceptor::mozilla_intermediate(SslMethod::tls()).unwrap();
+
     builder
-        .set_private_key_file(
-            "/etc/letsencrypt/live/atstest.xyz/privkey.pem",
-            SslFiletype::PEM,
-        )
-        .unwrap();
+        .set_private_key_file(key_file_path, openssl::ssl::SslFiletype::PEM).unwrap();
+
     builder
-        .set_certificate_chain_file("/etc/letsencrypt/live/atstest.xyz/fullchain.pem")
-        .unwrap();
+        .set_certificate_chain_file(cert_file_path).unwrap();
+
+    
+    // let private_key = rustls_pemfile::private_key(&mut BufReader::new(File::open(key_file_path).unwrap()));
+    // let cert_chain = rustls_pemfile::certs(&mut BufReader::new(File::open(cert_file_path).unwrap())).collect::<Result<Vec<_>, _>>()?;
+    // let config = rustls::ServerConfig::builder()
+    //     .with_no_client_auth()
+    //     .with_single_cert(cert_chain, private_key.unwrap().expect("REASON"))
+    //     .unwrap();
 
     HttpServer::new(move || {
         let cors = Cors::default()
@@ -61,4 +73,6 @@ async fn main() -> std::io::Result<()> {
     .bind_openssl(socket, builder)?
     .run()
     .await
+
 }
+
