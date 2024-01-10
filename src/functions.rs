@@ -1,20 +1,20 @@
 use log::info;
 use std::env;
-use std::net::{IpAddr, Ipv4Addr, SocketAddr};
-use std::str::FromStr;
+// use std::net::{IpAddr, Ipv4Addr, SocketAddr};
+// use std::str::FromStr;
 
-pub fn gen_server_addr() -> SocketAddr {
-    let raw_addr = env::var("COMSERV_RAW_HTTP").expect("COMSERV_RAW_HTTP not set");
-    let compare_v4_addr = Ipv4Addr::from_str(&raw_addr).unwrap();
-    let port: u16 = env::var("COMSERV_PORT")
-        .expect("COMSERV_PORT not set")
-        .parse()
-        .unwrap();
-    let socket = SocketAddr::new(IpAddr::V4(compare_v4_addr), port);
-    info!("Server Address: http://{:?}", socket);
+// pub fn gen_server_addr() -> SocketAddr {
+//     let raw_addr = env::var("COMSERV_RAW_HTTP").expect("COMSERV_RAW_HTTP not set");
+//     let compare_v4_addr = Ipv4Addr::from_str(&raw_addr).unwrap();
+//     let port: u16 = env::var("COMSERV_PORT")
+//         .expect("COMSERV_PORT not set")
+//         .parse()
+//         .unwrap();
+//     let socket = SocketAddr::new(IpAddr::V4(compare_v4_addr), port);
+//     info!("Server Address: http://{:?}", socket);
 
-    socket
-}
+//     socket
+// }
 
 pub fn db_file_checks() -> i32 {
     let mut db_dir = 0;
