@@ -62,9 +62,9 @@ pub async fn all_comments() -> impl Responder {
     //     fullcomvec.push(full_comment);
     // }
 
-    let fullcomvec_str = serde_json::to_string(&comment_vec).unwrap();
+    // let fullcomvec_str = serde_json::to_string(&comment_vec).unwrap();
 
-    HttpResponse::Ok().json(fullcomvec_str)
+    HttpResponse::Ok().json(comment_vec)
 }
 
 #[get("/addcom/{name}/{email}/{comment}")]
@@ -171,9 +171,9 @@ pub async fn all_estimates() -> impl Responder {
         estimate_vec.push(estimate);
     }
 
-    let fullestvec_str = serde_json::to_string(&estimate_vec).unwrap();
+    // let fullestvec_str = serde_json::to_string(&estimate_vec).unwrap();
 
-    HttpResponse::Ok().json(fullestvec_str)
+    HttpResponse::Ok().json(estimate_vec)
 }
 
 #[get("/addesti/{name}/{address}/{city}/{phone}/{email}/{comment}/{reqdate}")]
