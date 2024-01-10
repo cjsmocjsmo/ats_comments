@@ -16,14 +16,15 @@ pub struct Auth {
     pub outdate: String,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct Comment {
-    pub acctid: String,
-    pub comid: String,
-    pub email: String,
-    pub comment: String,
-    pub date: String,
-}
+// #[derive(Debug, Serialize, Deserialize)]
+// pub struct Comment {
+//     pub acctid: String,
+//     pub comid: String,
+//     pub email: String,
+//     pub comment: String,
+//     pub rating: String,
+//     pub date: String,
+// }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct FullComment {
@@ -31,6 +32,7 @@ pub struct FullComment {
     pub comid: String,
     pub email: String,
     pub comment: String,
+    pub rating: String,
     pub date: String,
     pub accepted: String,
     pub rejected: String,

@@ -24,19 +24,22 @@ pub async fn all_comments() -> impl Responder {
         let comidz = row.get(2).unwrap();
         let email = row.get(3).unwrap();
         let commentz: String = row.get(4).unwrap();
-        let datez = row.get(5).unwrap();
-        let acceptedz = row.get(6).unwrap();
-        let rejectedz = row.get(7).unwrap();
+        let rating = row.get(5).unwrap();
+        let datez = row.get(6).unwrap();
+        let acceptedz = row.get(7).unwrap();
+        let rejectedz = row.get(8).unwrap();
 
         let comment = types::FullComment {
             acctid: acctidz,
             comid: comidz,
             email: email,
             comment: commentz.clone(),
+            rating: rating,
             date: datez,
             accepted: acceptedz,
             rejected: rejectedz,
         };
+
         info!("Comment: {:?}", comment);
         comment_vec.push(comment);
     }
@@ -67,13 +70,14 @@ pub async fn all_comments() -> impl Responder {
     HttpResponse::Ok().json(comment_vec)
 }
 
-#[get("/addcom/{name}/{email}/{comment}")]
-pub async fn add_comment(f: web::Path<(String, String, String)>) -> impl Responder {
-    let (name, email, comment) = f.into_inner();
+#[get("/addcom/{name}/{email}/{comment}/{rating}")]
+pub async fn add_comment(f: web::Path<(String, String, String, String)>) -> impl Responder {
+    let (name, email, comment, rating) = f.into_inner();
     let comidz = accounts::create_hash(comment.clone());
     info!("name: {:#?}", name);
     info!("email: {:#?}", email);
     info!("comment: {:#?}", comment);
+    info!("rating: {:#?}", rating);
     let has_acct = accounts::has_account(email.clone());
     if has_acct {
         let acct_info = accounts::account_info_from_email(email.clone());
@@ -84,6 +88,7 @@ pub async fn add_comment(f: web::Path<(String, String, String)>) -> impl Respond
             comid: comidz.clone(),
             email: email.clone(),
             comment: comment.clone(),
+            rating: rating.clone(),
             date: datae.to_string(),
             accepted: "None".to_string(),
             rejected: "None".to_string(),
@@ -117,6 +122,7 @@ pub async fn add_comment(f: web::Path<(String, String, String)>) -> impl Respond
             comid: comidz.clone(),
             email: email.clone(),
             comment: comment.clone(),
+            rating: rating.clone(),
             date: datae.to_string(),
             accepted: "None".to_string(),
             rejected: "None".to_string(),
@@ -126,8 +132,8 @@ pub async fn add_comment(f: web::Path<(String, String, String)>) -> impl Respond
             env::var("COMSERV_COMMENTS_DB").expect("COMSERV_COMMENTS_DB not set");
         let conn = rusqlite::Connection::open(com_serv_comments_db).unwrap();
         conn.execute(
-            "INSERT INTO comments (acctid, comid, email, comment, date, accepted, rejected) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)",
-            &[&fullcomment.acctid, &fullcomment.comid, &fullcomment.email, &fullcomment.comment, &fullcomment.date, &fullcomment.accepted, &fullcomment.rejected],
+            "INSERT INTO comments (acctid, comid, email, comment, rating, date, accepted, rejected) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)",
+            &[&fullcomment.acctid, &fullcomment.comid, &fullcomment.email, &fullcomment.comment, &rating, &fullcomment.date, &fullcomment.accepted, &fullcomment.rejected],
         )
         .expect("unable to insert comment");
         // let minicom = types::Comment {

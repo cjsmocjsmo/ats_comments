@@ -1,8 +1,8 @@
 #!/bin/bash
 
-curl https://atstest.xyz/addcom/Herman%20Munster/herman@monster.com/this%20is%20the%20first%20comment%20lets%20see%20if%20it%20works;
+curl https://atstest.xyz/addcom/Herman%20Munster/herman@monster.com/this%20is%20the%20first%20comment%20lets%20see%20if%20it%20works/5;
 
-curl https://atstest.xyz/addcom/casper/casper@monster.com/this%20is%20another%20commit%20from%20casper;
+curl https://atstest.xyz/addcom/casper/casper@monster.com/this%20is%20another%20commit%20from%20casper/4;
 
 curl https://atstest.xyz/allcom;
 
