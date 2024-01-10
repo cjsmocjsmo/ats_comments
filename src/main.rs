@@ -46,14 +46,6 @@ async fn main() -> std::io::Result<()> {
     builder
         .set_certificate_chain_file(cert_file_path).unwrap();
 
-    
-    // let private_key = rustls_pemfile::private_key(&mut BufReader::new(File::open(key_file_path).unwrap()));
-    // let cert_chain = rustls_pemfile::certs(&mut BufReader::new(File::open(cert_file_path).unwrap())).collect::<Result<Vec<_>, _>>()?;
-    // let config = rustls::ServerConfig::builder()
-    //     .with_no_client_auth()
-    //     .with_single_cert(cert_chain, private_key.unwrap().expect("REASON"))
-    //     .unwrap();
-
     HttpServer::new(move || {
         let cors = Cors::default()
             .allow_any_origin()
