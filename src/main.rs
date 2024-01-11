@@ -14,9 +14,9 @@ use openssl::{
 
 pub mod accounts;
 pub mod db;
-pub mod envvars;
+// pub mod envvars;
 pub mod functions;
-// pub mod sendmail;
+pub mod sendmail;
 pub mod server;
 pub mod types;
 
@@ -25,7 +25,7 @@ async fn main() -> std::io::Result<()> {
     dotenv().ok();
  
     env_logger::init();
-    let _vars = envvars::set_env_vars();
+    // let _vars = envvars::set_env_vars();
 
     let db_check = functions::db_file_checks();
     info!("db_check result: {:?}", db_check);

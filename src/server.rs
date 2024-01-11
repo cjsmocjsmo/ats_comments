@@ -1,5 +1,5 @@
 use crate::accounts;
-// use crate::sendmail;
+use crate::sendmail;
 use crate::types;
 use actix_web::{get, web, HttpResponse, Responder};
 use chrono::prelude::*;
@@ -80,7 +80,7 @@ pub async fn add_comment(f: web::Path<(String, String, String, String)>) -> impl
         )
         .expect("unable to insert comment");
 
-
+        let _mail = sendmail::send_com_mail(commet).unwrap();
     } else {
         let acct_info = accounts::create_account(name.clone(), email.clone());
         let acctid = &acct_info.acctid;
@@ -105,9 +105,7 @@ pub async fn add_comment(f: web::Path<(String, String, String, String)>) -> impl
         )
         .expect("unable to insert comment");
 
-
-
-
+        let _mail = sendmail::send_com_mail(fullcomment).unwrap();
     };
 
     HttpResponse::Ok().body("Comment inserted into db\n")
@@ -176,6 +174,8 @@ pub async fn add_estimate(
             &[&estimate.acctid, &estimate.estid, &estimate.name, &estimate.address, &estimate.city, &estimate.phone, &estimate.email, &estimate.comment, &estimate.intake, &estimate.reqdate, &estimate.completed],
         )
         .expect("unable to insert estimate");
+
+        let _mail = sendmail::send_esti_mail(estimate).unwrap();
     } else {
         let acct_info = accounts::create_account(name.clone(), email.clone());
         let acctid = &acct_info.acctid;
@@ -201,6 +201,8 @@ pub async fn add_estimate(
             "INSERT INTO estimates (acctid, estid, name, address, city, phone, email, comment, intake, reqdate, completed) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11)",
             &[&estimate.acctid, &estimate.estid, &estimate.name, &estimate.address, &estimate.city, &estimate.phone, &estimate.email, &estimate.comment, &estimate.intake, &estimate.reqdate, &estimate.completed],
         ).expect("unable to insert estimate");
+
+        let _mail = sendmail::send_esti_mail(estimate).unwrap();
     };
 
     HttpResponse::Ok().body("\nEstimate inserted into db\n")
