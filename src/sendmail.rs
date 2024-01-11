@@ -1,78 +1,68 @@
-// use crate::types;
-// use log::info;
-// use std::process::Command;
+use mailjet_rs::common::Recipient;
+use mailjet_rs::v3::Message;
+use mailjet_rs::{Client, SendAPIVersion};
 
-// pub fn comment_sendmail(com_info: types::Comment) {
-//     // let msgid = format!("-msgid {}", com_info.comid);
-//     // let email = format!("-email {}", com_info.email);
-//     // let comment = format!("-comment '{}'", com_info.comment);
-//     // println!("msgid: {}", msgid);
-//     // println!("email: {}", email);
-//     // println!("comment: {}", comment);
-//     // let comment_str = format!("'{}'", com_info.comment);
+use crate::types;
 
-//     let output = Command::new("/usr/bin/sendmail")
-//         .arg("-etype")
-//         .arg("com".to_string())
-//         .arg("-msgid")
-//         .arg(com_info.comid)
-//         .arg("-email")
-//         .arg(com_info.email)
-//         .arg("-comment")
-//         .arg(com_info.comment)
-//         .output()
-//         .expect("Failed to execute script");
+#[tokio::main]
+async fn send_com_mail(com: types::FullComment) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+    // Create an instance of the Mailjet API client
+    // used to send the `Message` and also define your API
+    // credentials
+    let client = Client::new(
+        SendAPIVersion::V3,
+        "public_key",
+        "private_key",
+    );
 
-//     println!("Script output: {}", String::from_utf8_lossy(&output.stdout));
-//     println!("Status: {}", output.status);
-//     info!("Status: {}", output.status);
-// }
+    // Create your a `Message` instance with the minimum required values
+    let mut message = Message::new(
+        "porthose.cjsmo.cjsmo@gmail.com",
+        "atsbot: ",
+        Some("Your email flight plan!".to_string()),
+        Some("Dear passenger, welcome to Mailjet! May the delivery force be with you!".to_string())
+    );
 
-// pub fn mail_test(com_info: types::Comment) {
-//     let output = Command::new("/usr/share/sendmail/sendmail/sendmail")
-//         .arg("-etype")
-//         .arg("com")
-//         .arg("-msgid")
-//         .arg(com_info.comid)
-//         .arg("-email")
-//         .arg(com_info.email)
-//         .arg("-comment")
-//         .arg(com_info.comment)
-//         .output()
-//         .expect("Failed to execute script");
+    message.push_recipient(Recipient::new("receiver@company.com"));
 
-//     println!("Status: {}", output.status);
-//     info!("Status: {}", output.status);
-//     // let stdout = String::from_utf8_lossy(&output.stdout.unwrap_or_default());
-//     // println!("Script output: {}", stdout);
-//     // info!("Script output: {}", stdout);
-// }
+    // Finally send the message using the `Client`
+    let response = client.send(message).await;
 
-// pub fn estimate_sendmail(esti_info: types::Estimate) {
-//     let msgid = format!("-estid {}", esti_info.estid);
-//     let name = format!("-name {}", esti_info.name);
-//     let address = format!("-address {}", esti_info.email);
-//     let city = format!("-city {}", esti_info.city);
-//     let phone = format!("-phone {}", esti_info.phone);
-//     let email = format!("-email {}", esti_info.email);
-//     let comment = format!("-comment '{}'", esti_info.comment);
-//     let intake = format!("-intake {}", esti_info.intake);
-//     let reqdate = format!("-reqdate {}", esti_info.reqdate);
+    // Do something with the response from Mailjet
+    // Ok(Response { sent: [Sent { email: "your_receiver@company.com", message_id: 000, message_uuid: "message-uuid" }] })
+    println!("{:?}", response);
 
-//     let output = Command::new("/usr/bin/sendmail")
-//         .arg(msgid)
-//         .arg(name)
-//         .arg(address)
-//         .arg(city)
-//         .arg(phone)
-//         .arg(email)
-//         .arg(comment)
-//         .arg(intake)
-//         .arg(reqdate)
-//         .output()
-//         .expect("Failed to execute script");
+    Ok(())
+}
 
-//     println!("Script output: {}", String::from_utf8_lossy(&output.stdout));
-//     println!("Status: {}", output.status);
-//     info!("Status: {}", output.status);
-// }
+
+#[tokio::main]
+async fn send_esti_mail(est: types::Estimate) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+    // Create an instance of the Mailjet API client
+    // used to send the `Message` and also define your API
+    // credentials
+    let client = Client::new(
+        SendAPIVersion::V3,
+        "public_key",
+        "private_key",
+    );
+
+    // Create your a `Message` instance with the minimum required values
+    let mut message = Message::new(
+        "mailjet_sender@company.com",
+        "Mailjet Rust",
+        Some("Your email flight plan!".to_string()),
+        Some("Dear passenger, welcome to Mailjet! May the delivery force be with you!".to_string())
+    );
+
+    message.push_recipient(Recipient::new("receiver@company.com"));
+
+    // Finally send the message using the `Client`
+    let response = client.send(message).await;
+
+    // Do something with the response from Mailjet
+    // Ok(Response { sent: [Sent { email: "your_receiver@company.com", message_id: 000, message_uuid: "message-uuid" }] })
+    println!("{:?}", response);
+
+    Ok(())
+}

@@ -44,29 +44,6 @@ pub async fn all_comments() -> impl Responder {
         comment_vec.push(comment);
     }
 
-    // let mut fullcomvec = Vec::new();
-    // for com in comment_vec {
-    //     let acctidz = &com.acctid;
-    //     let acct_info = accounts::account_info_from_acctid(acctidz.to_string());
-    //     // let name = &acct_info[0].name;
-    //     let email = &acct_info[0].email;
-    //     let date = com.date;
-
-    //     let full_comment = types::FullComment {
-    //         acctid: acctidz.to_string(),
-    //         comid: com.comid,
-    //         email: email.to_string(),
-    //         comment: com.comment,
-    //         date: date,
-    //         accepted: "None".to_string(),
-    //         rejected: "None".to_string(),
-    //     };
-    //     info!("Full Comment: {:#?}", full_comment);
-    //     fullcomvec.push(full_comment);
-    // }
-
-    // let fullcomvec_str = serde_json::to_string(&comment_vec).unwrap();
-
     HttpResponse::Ok().json(comment_vec)
 }
 
@@ -103,16 +80,7 @@ pub async fn add_comment(f: web::Path<(String, String, String, String)>) -> impl
         )
         .expect("unable to insert comment");
 
-        // let minicom = types::Comment {
-        //     acctid: acctid.to_string(),
-        //     comid: comidz.clone(),
-        //     email: email.clone(),
-        //     comment: comment.clone(),
-        //     date: datae.to_string(),
-        // };
-        // info!("has_account Comment: {:#?}", minicom);
-        // let sendmail = sendmail::comment_sendmail(minicom);
-        // info!("sendmail: {:#?}", sendmail);
+
     } else {
         let acct_info = accounts::create_account(name.clone(), email.clone());
         let acctid = &acct_info.acctid;
@@ -136,16 +104,10 @@ pub async fn add_comment(f: web::Path<(String, String, String, String)>) -> impl
             &[&fullcomment.acctid, &fullcomment.comid, &fullcomment.email, &fullcomment.comment, &rating, &fullcomment.date, &fullcomment.accepted, &fullcomment.rejected],
         )
         .expect("unable to insert comment");
-        // let minicom = types::Comment {
-        //     acctid: acctid.to_string(),
-        //     comid: comidz.clone(),
-        //     email: email.clone(),
-        //     comment: comment.clone(),
-        //     date: datae.to_string(),
-        // };
-        // info!("has_account Comment: {:#?}", minicom);
-        // let sendmail = sendmail::comment_sendmail(minicom);
-        // info!("sendmail: {:#?}", sendmail);
+
+
+
+
     };
 
     HttpResponse::Ok().body("Comment inserted into db\n")
@@ -176,8 +138,6 @@ pub async fn all_estimates() -> impl Responder {
         info!("Estimate: {:?}", estimate);
         estimate_vec.push(estimate);
     }
-
-    // let fullestvec_str = serde_json::to_string(&estimate_vec).unwrap();
 
     HttpResponse::Ok().json(estimate_vec)
 }
@@ -216,22 +176,6 @@ pub async fn add_estimate(
             &[&estimate.acctid, &estimate.estid, &estimate.name, &estimate.address, &estimate.city, &estimate.phone, &estimate.email, &estimate.comment, &estimate.intake, &estimate.reqdate, &estimate.completed],
         )
         .expect("unable to insert estimate");
-        // let mail_est = types::Estimate {
-        //     acctid: acctid.to_string(),
-        //     estid: estidz.clone(),
-        //     name: name.clone(),
-        //     address: address.clone(),
-        //     city: city.clone(),
-        //     phone: phone.clone(),
-        //     email: email.clone(),
-        //     comment: comment.clone(),
-        //     intake: today.clone(),
-        //     reqdate: reqdate.clone(),
-        //     completed: "No".to_string(),
-        // };
-        // info!("has_account MailEstimate: {:#?}", mail_est);
-        // let sendmail = sendmail::estimate_sendmail(mail_est);
-        // info!("sendmail: {:#?}", sendmail);
     } else {
         let acct_info = accounts::create_account(name.clone(), email.clone());
         let acctid = &acct_info.acctid;
@@ -257,9 +201,6 @@ pub async fn add_estimate(
             "INSERT INTO estimates (acctid, estid, name, address, city, phone, email, comment, intake, reqdate, completed) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11)",
             &[&estimate.acctid, &estimate.estid, &estimate.name, &estimate.address, &estimate.city, &estimate.phone, &estimate.email, &estimate.comment, &estimate.intake, &estimate.reqdate, &estimate.completed],
         ).expect("unable to insert estimate");
-        // info!("Estimate: {:#?}", estimate);
-        // let sendmail = sendmail::estimate_sendmail(estimate);
-        // info!("sendmail: {:#?}", sendmail);
     };
 
     HttpResponse::Ok().body("\nEstimate inserted into db\n")
