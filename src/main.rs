@@ -6,7 +6,7 @@ use log::info;
 use std::env;
 use std::io::Read;
 use std::fs::File;
-use dotenv::dotenv;
+// use dotenv::dotenv;
 use openssl::{
     pkey::{PKey, Private},
     ssl::{SslAcceptor, SslMethod},
@@ -22,7 +22,7 @@ pub mod types;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    dotenv().ok();
+    dotenv::from_path("/usr/share/ats_comments/ats_comments/atscomments.env").ok();
  
     env_logger::init();
     // let _vars = envvars::set_env_vars();
