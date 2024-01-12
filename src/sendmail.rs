@@ -1,9 +1,9 @@
 use crate::types;
+use log::info;
 use mailjet_rs::common::Recipient;
 use mailjet_rs::v3::Message;
 use mailjet_rs::{Client, SendAPIVersion};
 use std::env;
-use log::info;
 
 pub async fn send_com_mail(
     com: types::FullComment,
@@ -56,15 +56,17 @@ pub async fn send_esti_mail(
     // Create an instance of the Mailjet API client
     // used to send the `Message` and also define your API
     // credentials
-    let client = Client::new(SendAPIVersion::V3, "public_key", "private_key");
+    let api_key = env::var("COMSERV_API_KEY").unwrap();
+    let sec_key = env::var("COMSERV_SEC_KEY").unwrap();
+    let client = Client::new(SendAPIVersion::V3, api_key.as_str(), &sec_key.as_str());
 
     // Create your a `Message` instance with the minimum required values
     let sender = "porthose.cjsmo.cjsmo@gmail.com";
     let mut message = Message::new(
         &sender,
         "ATSBOT",
-        Some("ATSBOT: New Comment".to_string()),
-        Some("ATSBOT: New Comment".to_string()),
+        Some("ATSBOT: New Estimate Request".to_string()),
+        Some("ATSBOT: New Estimate Request".to_string()),
     );
 
     let html1 = format!(
@@ -83,7 +85,7 @@ pub async fn send_esti_mail(
     message.html_part = Some(html1.to_string());
 
     info!("Esti Mail Message: {:?}", message);
-    
+
     message.push_recipient(Recipient::new("porthose.cjsmo.cjsmo@gmail.com"));
 
     // Finally send the message using the `Client`
