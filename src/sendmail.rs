@@ -55,6 +55,7 @@ pub async fn send_com_mail(
 pub async fn send_esti_mail(
     esti: types::Estimate,
 ) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
+    info!("Esti VEC: {:?}", esti);
     // Create an instance of the Mailjet API client
     // used to send the `Message` and also define your API
     // credentials
