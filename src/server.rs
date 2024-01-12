@@ -80,7 +80,11 @@ pub async fn add_comment(f: web::Path<(String, String, String, String)>) -> impl
         )
         .expect("unable to insert comment");
 
-        let _mail = sendmail::send_com_mail(commet);
+        let mailz = sendmail::send_com_mail(commet).await;
+        match mailz {
+            Ok(_) => info!("Mail Sent"),
+            Err(e) => info!("Mail Error: {:?}", e),
+        };
     } else {
         let acct_info = accounts::create_account(name.clone(), email.clone());
         let acctid = &acct_info.acctid;
@@ -105,7 +109,11 @@ pub async fn add_comment(f: web::Path<(String, String, String, String)>) -> impl
         )
         .expect("unable to insert comment");
 
-        let _mail = sendmail::send_com_mail(fullcomment);
+        let mailz = sendmail::send_com_mail(fullcomment).await;
+        match mailz {
+            Ok(_) => info!("Mail Sent"),
+            Err(e) => info!("Mail Error: {:?}", e),
+        };
     };
 
     HttpResponse::Ok().body("Comment inserted into db\n")
@@ -175,7 +183,11 @@ pub async fn add_estimate(
         )
         .expect("unable to insert estimate");
 
-        let _mail = sendmail::send_esti_mail(estimate);
+        let mailz = sendmail::send_esti_mail(estimate).await;
+        match mailz {
+            Ok(_) => info!("Mail Sent"),
+            Err(e) => info!("Mail Error: {:?}", e),
+        };
     } else {
         let acct_info = accounts::create_account(name.clone(), email.clone());
         let acctid = &acct_info.acctid;
@@ -202,7 +214,11 @@ pub async fn add_estimate(
             &[&estimate.acctid, &estimate.estid, &estimate.name, &estimate.address, &estimate.city, &estimate.phone, &estimate.email, &estimate.comment, &estimate.intake, &estimate.reqdate, &estimate.completed],
         ).expect("unable to insert estimate");
 
-        let _mail = sendmail::send_esti_mail(estimate);
+        let mailz = sendmail::send_esti_mail(estimate).await;
+        match mailz {
+            Ok(_) => info!("Mail Sent"),
+            Err(e) => info!("Mail Error: {:?}", e),
+        };
     };
 
     HttpResponse::Ok().body("\nEstimate inserted into db\n")

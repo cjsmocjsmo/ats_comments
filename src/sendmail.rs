@@ -3,9 +3,9 @@ use mailjet_rs::common::Recipient;
 use mailjet_rs::v3::Message;
 use mailjet_rs::{Client, SendAPIVersion};
 use std::env;
-// use log::info;
+use log::info;
 
-pub fn send_com_mail(
+pub async fn send_com_mail(
     com: types::FullComment,
 ) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     // Create an instance of the Mailjet API client
@@ -35,10 +35,12 @@ pub fn send_com_mail(
     );
     message.html_part = Some(html1.to_string());
 
+    info!("Com Mail Message: {:?}", message);
+
     message.push_recipient(Recipient::new("porthose.cjsmo.cjsmo@gmail.com"));
 
     // Finally send the message using the `Client`
-    let _response = client.send(message);
+    let _response = client.send(message).await;
 
     // Do something with the response from Mailjet
     // Ok(Response { sent: [Sent { email: "your_receiver@company.com", message_id: 000, message_uuid: "message-uuid" }] })
@@ -79,6 +81,9 @@ pub async fn send_esti_mail(
     );
 
     message.html_part = Some(html1.to_string());
+
+    info!("Esti Mail Message: {:?}", message);
+    
     message.push_recipient(Recipient::new("porthose.cjsmo.cjsmo@gmail.com"));
 
     // Finally send the message using the `Client`
