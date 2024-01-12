@@ -80,7 +80,7 @@ pub async fn add_comment(f: web::Path<(String, String, String, String)>) -> impl
         )
         .expect("unable to insert comment");
 
-        let _mail = sendmail::send_com_mail(commet).unwrap();
+        let _mail = sendmail::send_com_mail(commet);
     } else {
         let acct_info = accounts::create_account(name.clone(), email.clone());
         let acctid = &acct_info.acctid;
@@ -105,7 +105,7 @@ pub async fn add_comment(f: web::Path<(String, String, String, String)>) -> impl
         )
         .expect("unable to insert comment");
 
-        let _mail = sendmail::send_com_mail(fullcomment).unwrap();
+        let _mail = sendmail::send_com_mail(fullcomment);
     };
 
     HttpResponse::Ok().body("Comment inserted into db\n")
@@ -175,7 +175,7 @@ pub async fn add_estimate(
         )
         .expect("unable to insert estimate");
 
-        let _mail = sendmail::send_esti_mail(estimate).unwrap();
+        let _mail = sendmail::send_esti_mail(estimate);
     } else {
         let acct_info = accounts::create_account(name.clone(), email.clone());
         let acctid = &acct_info.acctid;
@@ -202,7 +202,7 @@ pub async fn add_estimate(
             &[&estimate.acctid, &estimate.estid, &estimate.name, &estimate.address, &estimate.city, &estimate.phone, &estimate.email, &estimate.comment, &estimate.intake, &estimate.reqdate, &estimate.completed],
         ).expect("unable to insert estimate");
 
-        let _mail = sendmail::send_esti_mail(estimate).unwrap();
+        let _mail = sendmail::send_esti_mail(estimate);
     };
 
     HttpResponse::Ok().body("\nEstimate inserted into db\n")
