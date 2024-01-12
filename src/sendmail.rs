@@ -43,7 +43,7 @@ pub async fn send_com_mail(
 
     info!("Com Mail Message: {:?}", message);
 
-    message.push_recipient(Recipient::new("tflowerpower1313@gmail.com"));
+    message.push_recipient(Recipient::new("alpha.treeservicecdm@gmail.com"));
 
     // Finally send the message using the `Client`
     let _response = client.send(message).await;
@@ -97,7 +97,7 @@ pub async fn send_esti_mail(
 
     info!("Esti Mail Message: {:?}", message);
 
-    message.push_recipient(Recipient::new("tflowerpower1313@gmail.com"));
+    message.push_recipient(Recipient::new("alpha.treeservicecdm@gmail.com"));
 
     // Finally send the message using the `Client`
     let _response = client.send(message).await;
