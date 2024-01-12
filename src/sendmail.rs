@@ -25,13 +25,39 @@ pub async fn send_com_mail(
 
     let html1 = format!(
         "
-        <div><p>Email: {}</p><p>Comment: {}</p><p>Rating: {}</p></div>
+        <div>
+            <p>{}</p>
+            <p>{}</p>
+            <p>{}</p>
+        </div>
         <a href='https://atstest.xyz/accept/{}'>
-        <button style='color:white;background-color:green;padding:5px;'>Accept</button></a>
+        <button class='acceptBtn'>Accept</button></a>
         <a href='https://atstest.xyz/reject/{}'>
-        <button style='color:white;background-color:red;padding:5px;'>Reject</button></a>
+        <button class='rejectBtn'>Reject</button></a>
+        <style>
+            p {{
+                font-size: 12px;
+                font-weight: bold;
+            }}
+            button {{
+                border-radius: 5px;
+                border: none;
+                font-size: 16px;
+                font-weight: bold;
+                margin: 8px;
+            }}
+            .acceptBtn {{
+                color: white;
+                background-color: green;
+                padding: 5px;
+            }}
+            .rejectBtn {{
+                color: white;
+                background-color: red;
+                padding: 5px;
+            }}
         ",
-        com.email, com.comment, com.rating, com.comid, com.comid,
+        com.email, com.rating, com.comment, com.comid, com.comid,
     );
     message.html_part = Some(html1.to_string());
 
@@ -41,10 +67,6 @@ pub async fn send_com_mail(
 
     // Finally send the message using the `Client`
     let _response = client.send(message).await;
-
-    // Do something with the response from Mailjet
-    // Ok(Response { sent: [Sent { email: "your_receiver@company.com", message_id: 000, message_uuid: "message-uuid" }] })
-    // info!("Com Mail Response: {:?}", response);
 
     Ok(())
 }
@@ -72,14 +94,35 @@ pub async fn send_esti_mail(
     let html1 = format!(
         "
         <div>
-            <p>{}</p><p>{}</p>
-            <p>{}</p><p>{}</p>
-            <p>{}</p><p>{}</p>
+            <p>{}</p>
+            <p>{}</p>
+            <p>{}</p>
+            <p>{}</p>
+            <p>{}</p>
+            <p>{}</p>
         </div>
         <a href='https://atstest.xyz/completed/{}'>
-        <button style='color:white;background-color:blue;padding:8px;'>Completed</button></a>
+        <button class='comBtn'>Completed</button></a>
+        <style>
+            p {{
+                font-size: 12px;
+                font-weight: bold;
+            }}
+            button {{
+                border-radius: 5px;
+                border: none;
+                font-size: 16px;
+                font-weight: bold;
+                margin: 8px;
+            }}
+            .comBtn {{
+                color: white;
+                background-color: green;
+                padding: 5px;
+            }}
+        </style>
         ",
-        esti.name, esti.address, esti.city, esti.phone, esti.email, esti.comment, esti.estid,
+        esti.name, esti.phone, esti.email, esti.address, esti.city, esti.comment, esti.estid,
     );
 
     message.html_part = Some(html1.to_string());
@@ -90,10 +133,6 @@ pub async fn send_esti_mail(
 
     // Finally send the message using the `Client`
     let _response = client.send(message).await;
-
-    // Do something with the response from Mailjet
-    // Ok(Response { sent: [Sent { email: "your_receiver@company.com", message_id: 000, message_uuid: "message-uuid" }] })
-    // println!("{:?}", response);
 
     Ok(())
 }
