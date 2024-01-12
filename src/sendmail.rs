@@ -25,7 +25,7 @@ pub async fn send_com_mail(
 
     let html1 = format!(
         "
-        <div><p>Email: {}</p><p>Comment: {}</p><p>Date: {}</p></div>
+        <div><p>Email: {}</p><p>Comment: {}</p><p>Rating: {}</p></div>
         <a href='https://atstest.xyz/accept/{}'>
         <button style='color:white;background-color:green;padding:5px;'>Accept</button></a>
         <a href='https://atstest.xyz/reject/{}'>
@@ -61,9 +61,9 @@ pub async fn send_esti_mail(
     let client = Client::new(SendAPIVersion::V3, api_key.as_str(), &sec_key.as_str());
 
     // Create your a `Message` instance with the minimum required values
-    let sender = "porthose.cjsmo.cjsmo@gmail.com";
+    // let sender = "porthose.cjsmo.cjsmo@gmail.com";
     let mut message = Message::new(
-        &sender,
+        "porthose.cjsmo.cjsmo@gmail.com",
         "ATSBOT",
         Some("ATSBOT: New Estimate Request".to_string()),
         Some("ATSBOT: New Estimate Request".to_string()),
@@ -77,7 +77,7 @@ pub async fn send_esti_mail(
             <p>{}</p><p>{}</p>
         </div>
         <a href='https://atstest.xyz/completed/{}'>
-        <button style='color:white;background-color:blue;padding:8px;'>Accept</button></a>
+        <button style='color:white;background-color:blue;padding:8px;'>Completed</button></a>
         ",
         esti.name, esti.address, esti.city, esti.phone, esti.email, esti.comment, esti.estid,
     );
@@ -89,7 +89,7 @@ pub async fn send_esti_mail(
     message.push_recipient(Recipient::new("porthose.cjsmo.cjsmo@gmail.com"));
 
     // Finally send the message using the `Client`
-    let _response = client.send(message);
+    let _response = client.send(message).await;
 
     // Do something with the response from Mailjet
     // Ok(Response { sent: [Sent { email: "your_receiver@company.com", message_id: 000, message_uuid: "message-uuid" }] })

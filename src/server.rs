@@ -185,7 +185,7 @@ pub async fn add_estimate(
 
         let mailz = sendmail::send_esti_mail(estimate).await;
         match mailz {
-            Ok(_) => info!("Mail Sent"),
+            Ok(_) => info!("Esti Mail Sent"),
             Err(e) => info!("Mail Error: {:?}", e),
         };
     } else {
@@ -216,7 +216,7 @@ pub async fn add_estimate(
 
         let mailz = sendmail::send_esti_mail(estimate).await;
         match mailz {
-            Ok(_) => info!("Mail Sent"),
+            Ok(_) => info!("Esti Mail Sent"),
             Err(e) => info!("Mail Error: {:?}", e),
         };
     };
