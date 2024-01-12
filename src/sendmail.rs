@@ -26,36 +26,16 @@ pub async fn send_com_mail(
     let html1 = format!(
         "
         <div>
-            <p>{}</p>
-            <p>{}</p>
-            <p>{}</p>
+            <p style='font-size:12px;font-weight:bold;'>{}</p>
+            <p style='font-size:12px;font-weight:bold;'>{}</p>
+            <p style='font-size:12px;font-weight:bold;'>{}</p>
         </div>
         <a href='https://atstest.xyz/accept/{}'>
-        <button class='acceptBtn'>Accept</button></a>
+            <button style='border-radius:8px;border:none;font-size:12px;font-weight:bold;color:white;background-color:green;padding:8px;margin:8px'>Accept</button>
+        </a>
         <a href='https://atstest.xyz/reject/{}'>
-        <button class='rejectBtn'>Reject</button></a>
-        <style>
-            p {{
-                font-size: 12px;
-                font-weight: bold;
-            }}
-            button {{
-                border-radius: 5px;
-                border: none;
-                font-size: 16px;
-                font-weight: bold;
-                margin: 8px;
-            }}
-            .acceptBtn {{
-                color: white;
-                background-color: green;
-                padding: 5px;
-            }}
-            .rejectBtn {{
-                color: white;
-                background-color: red;
-                padding: 5px;
-            }}
+            <button style='border-radius:8px;border:none;font-size:12px;font-weight:bold;color:white;background-color:red;padding:8px;margin:8px'>Reject</button>
+        </a>
         ",
         com.email, com.rating, com.comment, com.comid, com.comid,
     );
@@ -94,35 +74,18 @@ pub async fn send_esti_mail(
     let html1 = format!(
         "
         <div>
-            <p>{}</p>
-            <p>{}</p>
-            <p>{}</p>
-            <p>{}</p>
-            <p>{}</p>
-            <p>{}</p>
+            <p style='font-size:12px;font-weight:bold;'>{}</p>
+            <a href='tel:{}'>{}</a>
+            <a href='mailto:{}'>{}</a>
+            <p style='font-size:12px;font-weight:bold;'>{}</p>
+            <p style='font-size:12px;font-weight:bold;'>{}</p>
+            <p style='font-size:12px;font-weight:bold;'>{}</p>
         </div>
         <a href='https://atstest.xyz/completed/{}'>
-        <button class='comBtn'>Completed</button></a>
-        <style>
-            p {{
-                font-size: 12px;
-                font-weight: bold;
-            }}
-            button {{
-                border-radius: 5px;
-                border: none;
-                font-size: 16px;
-                font-weight: bold;
-                margin: 8px;
-            }}
-            .comBtn {{
-                color: white;
-                background-color: green;
-                padding: 5px;
-            }}
-        </style>
+            <button style='border-radius:8px;border:none;font-size:12px;font-weight:bold;color:white;background-color:green;padding:8px;margin:8px'>Completed</button>
+        </a>
         ",
-        esti.name, esti.phone, esti.email, esti.address, esti.city, esti.comment, esti.estid,
+        esti.name, esti.phone, esti.phone, esti.email, esti.email, esti.address, esti.city, esti.comment, esti.estid,
     );
 
     message.html_part = Some(html1.to_string());
