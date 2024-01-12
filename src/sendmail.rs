@@ -75,8 +75,12 @@ pub async fn send_esti_mail(
         "
         <div>
             <p style='font-size:12px;font-weight:bold;'>{}</p>
-            <a href='tel:{}'>{}</a>
-            <a href='mailto:{}'>{}</a>
+            <p style='font-size:12px;font-weight:bold;'>
+                <a href='tel:{}'>{}</a>
+            </p>
+            <p style='font-size:12px;font-weight:bold;'>
+                <a href='mailto:{}'>{}</a>
+            </p>
             <p style='font-size:12px;font-weight:bold;'>{}</p>
             <p style='font-size:12px;font-weight:bold;'>{}</p>
             <p style='font-size:12px;font-weight:bold;'>{}</p>
