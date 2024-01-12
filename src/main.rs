@@ -20,8 +20,8 @@ pub mod sendmail;
 pub mod server;
 pub mod types;
 
-
-#[actix_web::main]
+#[tokio::main]
+// #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     dotenv::from_path("/usr/share/ats_comments/ats_comments/atscomments.env").ok();
  
