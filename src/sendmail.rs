@@ -51,7 +51,7 @@ pub async fn send_com_mail(
     Ok(())
 }
 
-// #[tokio::main]
+
 pub async fn send_esti_mail(
     esti: types::Estimate,
 ) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
@@ -99,7 +99,6 @@ pub async fn send_esti_mail(
 
     // message.push_recipient(Recipient::new("alpha.treeservicecdm@gmail.com"));
     message.push_recipient(Recipient::new("porthose.cjsmo.cjsmo@gmail.com"));
-    
 
     // Finally send the message using the `Client`
     let _response = client.send(message).await;

@@ -20,28 +20,33 @@ pub async fn all_comments() -> impl Responder {
     let mut rows = stmt.query([]).unwrap();
     let mut comment_vec = Vec::new();
     while let Some(row) = rows.next().unwrap() {
-        let acctidz = row.get(1).unwrap();
-        let comidz = row.get(2).unwrap();
-        let email = row.get(3).unwrap();
-        let commentz: String = row.get(4).unwrap();
-        let rating = row.get(5).unwrap();
-        let datez = row.get(6).unwrap();
-        let acceptedz = row.get(7).unwrap();
-        let rejectedz = row.get(8).unwrap();
+        let acctidz: String = row.get(1).unwrap();
+        let comidz: String = row.get(2).unwrap();
+        let namez: String = row.get(3).unwrap();
+        let emailz: String = row.get(4).unwrap();
+        let commentz: String = row.get(5).unwrap();
+        let ratingz: String = row.get(6).unwrap();
+        let datez: String = row.get(7).unwrap();
+        let acceptedz: String = row.get(8).unwrap();
+        let rejectedz: String = row.get(9).unwrap();
 
         let comment = types::FullComment {
-            acctid: acctidz,
-            comid: comidz,
-            email: email,
-            comment: commentz.clone(),
-            rating: rating,
-            date: datez,
-            accepted: acceptedz,
-            rejected: rejectedz,
+            acctid: acctidz.to_string(),
+            comid: comidz.to_string(),
+            name: namez.to_string(),
+            email: emailz.to_string(),
+            comment: commentz.to_string(),
+            rating: ratingz.to_string(),
+            date: datez.to_string(),
+            accepted: acceptedz.to_string(),
+            rejected: rejectedz.to_string(),
         };
-
         info!("Comment: {:?}", comment);
         comment_vec.push(comment);
+
+
+
+        
     }
 
     HttpResponse::Ok().json(comment_vec)
@@ -63,6 +68,7 @@ pub async fn add_comment(f: web::Path<(String, String, String, String)>) -> impl
         let commet = types::FullComment {
             acctid: acctid.to_string(),
             comid: comidz.clone(),
+            name: name.clone(),
             email: email.clone(),
             comment: comment.clone(),
             rating: rating.clone(),
@@ -75,8 +81,8 @@ pub async fn add_comment(f: web::Path<(String, String, String, String)>) -> impl
             env::var("COMSERV_COMMENTS_DB").expect("COMSERV_COMMENTS_DB not set");
         let conn = rusqlite::Connection::open(com_serv_comments_db).unwrap();
         conn.execute(
-            "INSERT INTO comments (acctid, comid, email, comment, date, accepted, rejected) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7)",
-            &[&commet.acctid, &commet.comid, &commet.email, &commet.comment, &commet.date, &commet.accepted, &commet.rejected],
+            "INSERT INTO comments (acctid, comid, name, email, comment, date, accepted, rejected) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)",
+            &[&commet.acctid, &commet.comid, &commet.name, &commet.email, &commet.comment, &commet.date, &commet.accepted, &commet.rejected],
         )
         .expect("unable to insert comment");
 
@@ -92,6 +98,7 @@ pub async fn add_comment(f: web::Path<(String, String, String, String)>) -> impl
         let fullcomment = types::FullComment {
             acctid: acctid.to_string(),
             comid: comidz.clone(),
+            name: name.clone(),
             email: email.clone(),
             comment: comment.clone(),
             rating: rating.clone(),
@@ -104,8 +111,8 @@ pub async fn add_comment(f: web::Path<(String, String, String, String)>) -> impl
             env::var("COMSERV_COMMENTS_DB").expect("COMSERV_COMMENTS_DB not set");
         let conn = rusqlite::Connection::open(com_serv_comments_db).unwrap();
         conn.execute(
-            "INSERT INTO comments (acctid, comid, email, comment, rating, date, accepted, rejected) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)",
-            &[&fullcomment.acctid, &fullcomment.comid, &fullcomment.email, &fullcomment.comment, &rating, &fullcomment.date, &fullcomment.accepted, &fullcomment.rejected],
+            "INSERT INTO comments (acctid, comid, name, email, comment, rating, date, accepted, rejected) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)",
+            &[&fullcomment.acctid, &fullcomment.comid, &fullcomment.name, &fullcomment.email, &fullcomment.comment, &rating, &fullcomment.date, &fullcomment.accepted, &fullcomment.rejected],
         )
         .expect("unable to insert comment");
 

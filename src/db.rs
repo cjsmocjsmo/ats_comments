@@ -56,6 +56,7 @@ pub fn create_comments_table() -> Result<()> {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             acctid TEXT NOT NULL,
             comid TEXT NOT NULL,
+            name TEXT NOT NULL,
             email TEXT NOT NULL,
             comment TEXT NOT NULL,
             rating TEXT NOT NULL,
