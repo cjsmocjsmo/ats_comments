@@ -29,6 +29,7 @@ pub async fn send_com_mail(
             <p style='font-size:12px;font-weight:bold;'>{}</p>
             <p style='font-size:12px;font-weight:bold;'>{}</p>
             <p style='font-size:12px;font-weight:bold;'>{}</p>
+            <p style='font-size:12px;font-weight:bold;'>{}</p>
         </div>
         <a href='https://atstest.xyz/accept/{}'>
             <button style='border-radius:8px;border:none;font-size:12px;font-weight:bold;color:white;background-color:green;padding:8px;margin:8px'>Accept</button>
@@ -37,7 +38,7 @@ pub async fn send_com_mail(
             <button style='border-radius:8px;border:none;font-size:12px;font-weight:bold;color:white;background-color:red;padding:8px;margin:8px'>Reject</button>
         </a>
         ",
-        com.email, com.rating, com.comment, com.comid, com.comid,
+        com.name, com.email, com.rating, com.comment, com.comid, com.comid,
     );
     message.html_part = Some(html1.to_string());
 
