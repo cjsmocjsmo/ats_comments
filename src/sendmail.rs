@@ -86,12 +86,13 @@ pub async fn send_esti_mail(
             <p style='font-size:12px;font-weight:bold;'>{}</p>
             <p style='font-size:12px;font-weight:bold;'>{}</p>
             <p style='font-size:12px;font-weight:bold;'>{}</p>
+            <p style='font-size:12px;font-weight:bold;'>{}</p>
         </div>
         <a href='https://atstest.xyz/completed/{}'>
             <button style='border-radius:8px;border:none;font-size:12px;font-weight:bold;color:white;background-color:green;padding:8px;margin:8px'>Completed</button>
         </a>
         ",
-        esti.name, esti.phone, esti.phone, esti.email, esti.email, esti.address, esti.city, esti.comment, esti.estid,
+        esti.name, esti.phone, esti.phone, esti.email, esti.email, esti.address, esti.city, esti.comment, esti.reqdate, esti.estid,
     );
 
     message.html_part = Some(html1.to_string());
