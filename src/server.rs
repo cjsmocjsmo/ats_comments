@@ -1,7 +1,7 @@
 use crate::accounts;
 use crate::sendmail;
 use crate::types;
-use actix_web::{get, web, HttpResponse, Responder, web::Redirect};
+use actix_web::{get, web, web::Redirect, HttpResponse, Responder};
 use chrono::prelude::*;
 use log::info;
 use std::env;
@@ -43,10 +43,6 @@ pub async fn all_comments() -> impl Responder {
         };
         info!("Comment: {:?}", comment);
         comment_vec.push(comment);
-
-
-
-        
     }
 
     HttpResponse::Ok().json(comment_vec)
@@ -246,9 +242,44 @@ pub async fn accept_comment(id: web::Path<String>) -> impl Responder {
     )
     .expect("unable to update comment");
 
+    let boo = "
+    <html>
+    <body>
+    <main>
+        <div class='accepted'>
+            <h1>Accepted</h1>
+            <p>Thank you! The comment has been flagged ACCEPED!</p>
+        </div>
+    </main>
+    </Layout>
+
+    <style>
+    main {
+        margin: auto;
+        padding: 1rem;
+        width: 800px;
+        max-width: calc(100% - 2rem);
+        min-height: 100vh;
+        color: white;
+        font-size: 20px;
+        line-height: 1.6;
+    }
+    .accepted {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-top: 2rem;
+    }
+    </style>
+    </body>
+    </html>
+    "
+    .to_string();
+
     Redirect::to("https://alpha-tree.biz/accepted").permanent();
 
-    HttpResponse::Ok().body("\nComment Updated\n")
+    HttpResponse::Ok().body(boo)
 }
 
 #[get("/reject/{msgid}")]
