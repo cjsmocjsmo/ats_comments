@@ -1,7 +1,7 @@
 use crate::accounts;
 use crate::sendmail;
 use crate::types;
-use actix_web::{get, web, HttpResponse, Responder};
+use actix_web::{get, web, HttpResponse, Responder, web::Redirect};
 use chrono::prelude::*;
 use log::info;
 use std::env;
@@ -246,6 +246,8 @@ pub async fn accept_comment(id: web::Path<String>) -> impl Responder {
     )
     .expect("unable to update comment");
 
+    Redirect::to("https://alpha-tree.biz/accepted").permanent();
+
     HttpResponse::Ok().body("\nComment Updated\n")
 }
 
@@ -264,6 +266,8 @@ pub async fn reject_comment(id: web::Path<String>) -> impl Responder {
     )
     .expect("unable to update comment");
 
+    Redirect::to("https://alpha-tree.biz/rejected").permanent();
+
     HttpResponse::Ok().body("\nComment Rejected\n")
 }
 
@@ -279,6 +283,8 @@ pub async fn esti_complete(id: web::Path<String>) -> impl Responder {
         &[&todays_date, &msgid],
     )
     .expect("unable to update estimate");
+
+    Redirect::to("https://alpha-tree.biz/completed").permanent();
 
     HttpResponse::Ok().body("\nEstimate Completed\n")
 }

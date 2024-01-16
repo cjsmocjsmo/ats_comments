@@ -317,7 +317,7 @@ dependencies = [
 
 [[package]]
 name = "ats_comments"
-version = "0.1.10"
+version = "0.1.11"
 dependencies = [
  "actix-cors",
  "actix-files",
