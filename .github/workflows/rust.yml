@@ -21,7 +21,7 @@ jobs:
     - name: Run tests
       run: cargo test --verbose
     - name: Upload artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: ats_comments
         path: target/release/ats_comments
