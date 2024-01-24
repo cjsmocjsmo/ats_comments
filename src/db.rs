@@ -62,7 +62,8 @@ pub fn create_comments_table() -> Result<()> {
             rating TEXT NOT NULL,
             date TEXT NOT NULL,
             accepted TEXT NOT NULL,
-            rejected TEXT NOT NULL
+            rejected TEXT NOT NULL,
+            mediapath TEXT NOT NULL
          )",
         (),
     )?;
@@ -88,7 +89,8 @@ pub fn create_estimates_table() -> Result<()> {
             comment TEXT NOT NULL,
             intake TEXT NOT NULL,
             reqdate TEXT NOT NULL,
-            completed TEXT NOT NULL
+            completed TEXT NOT NULL,
+            mediapath TEXT NOT NULL
          )",
         (),
     )?;

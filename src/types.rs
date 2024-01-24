@@ -16,15 +16,14 @@ pub struct Auth {
     pub outdate: String,
 }
 
-// #[derive(Debug, Serialize, Deserialize)]
-// pub struct Comment {
-//     pub acctid: String,
-//     pub comid: String,
-//     pub email: String,
-//     pub comment: String,
-//     pub rating: String,
-//     pub date: String,
-// }
+#[derive(Debug, Serialize, Deserialize)]
+pub struct FormData {
+    pub name: String,
+    pub email: String,
+    pub rating: String,
+    pub comment: String,
+    pub filepicker: String,
+}
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct FullComment {
@@ -37,6 +36,7 @@ pub struct FullComment {
     pub date: String,
     pub accepted: String,
     pub rejected: String,
+    pub mediapath: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -52,6 +52,7 @@ pub struct Estimate {
     pub intake: String,
     pub reqdate: String,
     pub completed: String,
+    pub mediapath: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
