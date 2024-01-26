@@ -101,12 +101,12 @@ pub async fn all_estimates() -> impl Responder {
 
 
 
-#[get("/addcom/{name}/{email}/{rating}/{coment}")]
+#[get("/addcom/{name}/{email}/{rating}/{comment}")]
 pub async fn add_comment(
     f: web::Path<(String, String, String, String)>,
 ) -> impl Responder {
-    let (name, email, rating, comment) = f.into_inner();
-    let eid = name.clone() + &email + &rating;
+    let (name, email, ratingz, commentz) = f.into_inner();
+    let eid = name.clone() + &email + &ratingz;
     let comidz = accounts::create_hash(eid.clone());
     let has_acct = accounts::has_account(email.clone());
     if has_acct {
@@ -118,8 +118,8 @@ pub async fn add_comment(
             comid: comidz.clone(),
             name: name.clone(),
             email: email.clone(),
-            comment: comment.clone(),
-            rating: "None".to_string(),
+            comment: commentz.clone(),
+            rating: ratingz,
             date: today.clone(),
             accepted: "None".to_string(),
             rejected: "None".to_string(),
@@ -149,8 +149,8 @@ pub async fn add_comment(
             comid: comidz.clone(),
             name: name.clone(),
             email: email.clone(),
-            comment: comment.clone(),
-            rating: "None".to_string(),
+            comment: commentz.clone(),
+            rating: ratingz,
             date: today.clone(),
             accepted: "None".to_string(),
             rejected: "None".to_string(),
