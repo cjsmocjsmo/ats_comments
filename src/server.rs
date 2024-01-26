@@ -103,11 +103,11 @@ pub async fn all_estimates() -> impl Responder {
 
 #[get("/addcom/{name}/{email}/{rating}/{coment}")]
 pub async fn add_comment(
-    f: web::Path<(String, String, String, String, String, String, String)>,
+    f: web::Path<(String, String, String, String)>,
 ) -> impl Responder {
-    let (name, address, city, phone, email, comment, reqdate) = f.into_inner();
-    let eid = name.clone() + &address + &city + &phone + &email;
-    let estidz = accounts::create_hash(eid.clone());
+    let (name, email, rating, comment) = f.into_inner();
+    let eid = name.clone() + &email + &rating;
+    let comidz = accounts::create_hash(eid.clone());
     let has_acct = accounts::has_account(email.clone());
     if has_acct {
         let acct_info = accounts::account_info_from_email(email.clone());
@@ -115,7 +115,7 @@ pub async fn add_comment(
         let today = Local::now().format("%Y-%m-%d").to_string();
         let comment = types::FullComment {
             acctid: acctid.to_string(),
-            comid: estidz.clone(),
+            comid: comidz.clone(),
             name: name.clone(),
             email: email.clone(),
             comment: comment.clone(),
@@ -125,56 +125,54 @@ pub async fn add_comment(
             rejected: "None".to_string(),
             mediapath: "None".to_string(),
         };
-        info!("has_account Estimate: {:#?}", comment);
+        info!("has_account COMMENTS: {:#?}", comment);
         let com_serv_comment_db =
-            env::var("COMSERV_ESTIMATES_DB").expect("COMSERV_ESTIMATES_DB not set");
+            env::var("COMSERV_COMMENTS_DB").expect("COMSERV_COMMENTS_DB not set");
         let conn = rusqlite::Connection::open(com_serv_comment_db).unwrap();
         conn.execute(
             "INSERT INTO comments (acctid, comid, name, email, comment, rating, date, accepted, rejected, mediapath) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10)",
             &[&comment.acctid, &comment.comid, &comment.name, &comment.email, &comment.comment, &comment.rating, &comment.date, &comment.accepted, &comment.rejected, &comment.mediapath],
         )
-        .expect("unable to insert estimate");
+        .expect("unable to insert comment");
 
         let mailz = sendmail::send_com_mail(comment).await;
         match mailz {
-            Ok(_) => info!("Esti Mail Sent"),
+            Ok(_) => info!("comment Mail Sent"),
             Err(e) => info!("Mail Error: {:?}", e),
         };
     } else {
         let acct_info = accounts::create_account(name.clone(), email.clone());
         let acctid = &acct_info.acctid;
         let today = Local::now().format("%Y-%m-%d").to_string();
-        let estimate = types::Estimate {
+        let comment = types::FullComment {
             acctid: acctid.to_string(),
-            estid: estidz.clone(),
+            comid: comidz.clone(),
             name: name.clone(),
-            address: address.clone(),
-            city: city.clone(),
-            phone: phone.clone(),
             email: email.clone(),
             comment: comment.clone(),
-            intake: today.clone(),
-            reqdate: reqdate.clone(),
-            completed: "No".to_string(),
+            rating: "None".to_string(),
+            date: today.clone(),
+            accepted: "None".to_string(),
+            rejected: "None".to_string(),
             mediapath: "None".to_string(),
         };
-        info!("create_account Estimate: {:#?}", estimate);
-        let com_serv_estimates_db =
-            env::var("COMSERV_ESTIMATES_DB").expect("COMSERV_ESTIMATES_DB not set");
-        let conn = rusqlite::Connection::open(com_serv_estimates_db).unwrap();
+        info!("create_account comment: {:#?}", comment);
+        let com_serv_comment_db =
+            env::var("COMSERV_COMMENTS_DB").expect("COMSERV_COMMENTS_DB not set");
+        let conn = rusqlite::Connection::open(com_serv_comment_db).unwrap();
         conn.execute(
-            "INSERT INTO estimates (acctid, estid, name, address, city, phone, email, comment, intake, reqdate, completed) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11)",
-            &[&estimate.acctid, &estimate.estid, &estimate.name, &estimate.address, &estimate.city, &estimate.phone, &estimate.email, &estimate.comment, &estimate.intake, &estimate.reqdate, &estimate.completed],
-        ).expect("unable to insert estimate");
+            "INSERT INTO comments (acctid, comid, name, email, comment, rating, date, accepted, rejected, mediapath) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10)",
+            &[&comment.acctid, &comment.comid, &comment.name, &comment.email, &comment.comment, &comment.rating, &comment.date, &comment.accepted, &comment.rejected, &comment.mediapath],
+        ).expect("unable to insert comment");
 
-        let mailz = sendmail::send_esti_mail(estimate).await;
+        let mailz = sendmail::send_com_mail(comment).await;
         match mailz {
-            Ok(_) => info!("Esti Mail Sent"),
-            Err(e) => info!("Mail Error: {:?}", e),
+            Ok(_) => info!("comment Mail Sent"),
+            Err(e) => info!("comment Mail Error: {:?}", e),
         };
     };
 
-    HttpResponse::Ok().body("\nEstimate inserted into db\n")
+    HttpResponse::Ok().body("\ncomment inserted into db\n")
 }
 
 
