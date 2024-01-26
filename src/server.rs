@@ -16,7 +16,6 @@ use std::fs::File;
 // use uuid::Uuid;
 // use sanitize_filename;
 
-
 #[get("/test")]
 pub async fn test() -> impl Responder {
     HttpResponse::Ok().body("\nATS Comments Server up and running!\n")
@@ -91,20 +90,8 @@ pub async fn all_estimates() -> impl Responder {
     HttpResponse::Ok().json(estimate_vec)
 }
 
-
-
-
-
-
-
-
-
-
-
 #[get("/addcom/{name}/{email}/{rating}/{comment}")]
-pub async fn add_comment(
-    f: web::Path<(String, String, String, String)>,
-) -> impl Responder {
+pub async fn add_comment(f: web::Path<(String, String, String, String)>) -> impl Responder {
     let (name, email, ratingz, commentz) = f.into_inner();
     let eid = name.clone() + &email + &ratingz;
     let comidz = accounts::create_hash(eid.clone());
@@ -175,56 +162,6 @@ pub async fn add_comment(
     HttpResponse::Ok().body("\ncomment inserted into db\n")
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #[get("/addesti/{name}/{address}/{city}/{phone}/{email}/{comment}/{reqdate}")]
 pub async fn add_estimate(
     f: web::Path<(String, String, String, String, String, String, String)>,
@@ -256,8 +193,8 @@ pub async fn add_estimate(
             env::var("COMSERV_ESTIMATES_DB").expect("COMSERV_ESTIMATES_DB not set");
         let conn = rusqlite::Connection::open(com_serv_estimates_db).unwrap();
         conn.execute(
-            "INSERT INTO estimates (acctid, estid, name, address, city, phone, email, comment, intake, reqdate, completed) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11)",
-            &[&estimate.acctid, &estimate.estid, &estimate.name, &estimate.address, &estimate.city, &estimate.phone, &estimate.email, &estimate.comment, &estimate.intake, &estimate.reqdate, &estimate.completed],
+            "INSERT INTO estimates (acctid, estid, name, address, city, phone, email, comment, intake, reqdate, completed, mediapath) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12)",
+            &[&estimate.acctid, &estimate.estid, &estimate.name, &estimate.address, &estimate.city, &estimate.phone, &estimate.email, &estimate.comment, &estimate.intake, &estimate.reqdate, &estimate.completed, &estimate.mediapath],
         )
         .expect("unable to insert estimate");
 
@@ -289,8 +226,8 @@ pub async fn add_estimate(
             env::var("COMSERV_ESTIMATES_DB").expect("COMSERV_ESTIMATES_DB not set");
         let conn = rusqlite::Connection::open(com_serv_estimates_db).unwrap();
         conn.execute(
-            "INSERT INTO estimates (acctid, estid, name, address, city, phone, email, comment, intake, reqdate, completed) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11)",
-            &[&estimate.acctid, &estimate.estid, &estimate.name, &estimate.address, &estimate.city, &estimate.phone, &estimate.email, &estimate.comment, &estimate.intake, &estimate.reqdate, &estimate.completed],
+            "INSERT INTO estimates (acctid, estid, name, address, city, phone, email, comment, intake, reqdate, completed, mediapath) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12)",
+            &[&estimate.acctid, &estimate.estid, &estimate.name, &estimate.address, &estimate.city, &estimate.phone, &estimate.email, &estimate.comment, &estimate.intake, &estimate.reqdate, &estimate.completed, &estimate.mediapath],
         ).expect("unable to insert estimate");
 
         let mailz = sendmail::send_esti_mail(estimate).await;
@@ -561,8 +498,6 @@ pub async fn backup_file() -> impl Responder {
 //     Ok(HttpResponse::Ok().into())
 // }
 
-    
-
 // #[post("/addcom")]
 // async fn add_comment(mut payload: Multipart) -> Result<HttpResponse, Error> {
 //     info!("Starting add_comment");
@@ -617,8 +552,6 @@ pub async fn backup_file() -> impl Responder {
 //         }
 //     }
 
-    
-
 //     info!("name: {:#?}", name);
 
 //     info!("email: {:#?}", email);
@@ -631,8 +564,7 @@ pub async fn backup_file() -> impl Responder {
 
 //     let comidz = accounts::create_hash(comment.clone());
 //     let has_acct = accounts::has_account(email.clone());
-    
-    
+
 //     if has_acct {
 //         let acct_info = accounts::account_info_from_email(email.clone());
 //         let acctid = &acct_info[0].acctid;
