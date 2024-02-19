@@ -1,5 +1,6 @@
 use log::info;
 use std::env;
+use crate::db;
 // use std::net::{IpAddr, Ipv4Addr, SocketAddr};
 // use std::str::FromStr;
 
@@ -32,36 +33,40 @@ pub fn db_file_checks() -> i32 {
         std::fs::File::create(&comserv_acct_db_file).expect("Unable to create accouts db file");
         info!("Created accounts db file: {:?}", &comserv_acct_db_file);
         acct += 1;
-    } else {
-        info!("Accounts db file exists: {:?}", &comserv_acct_db_file);
-    }
+    } 
+    
+    let _act_table = db::create_acct_table().unwrap();
+
     let mut auth = 0;
     let comserv_auth_db = env::var("COMSERV_AUTH_DB").expect("COMSERV_AUTH_DB not set");
     if !std::path::Path::new(&comserv_auth_db).exists() {
         std::fs::File::create(&comserv_auth_db).expect("Unable to create the auth db file");
         info!("Created auth db file: {:?}", &comserv_auth_db);
         auth += 1;
-    } else {
-        info!("Auth db file exists: {:?}", &comserv_auth_db);
-    }
+    } 
+    
+    let _auth_table = db::create_auth_table().unwrap();
+
     let mut comments = 0;
     let comserv_comments_db = env::var("COMSERV_COMMENTS_DB").expect("COMSERV_COMMENTS_DB not set");
     if !std::path::Path::new(&comserv_comments_db).exists() {
         std::fs::File::create(&comserv_comments_db).expect("Unable to create the comments db file");
         info!("Created comments db file: {:?}", &comserv_comments_db);
         comments += 1;
-    } else {
-        info!("Comments db file exists: {:?}", &comserv_comments_db);
-    }
+    } 
+    
+    let _com_table = db::create_comments_table().unwrap();
+
     let mut estimates = 0;
     let comserv_esti_db = env::var("COMSERV_ESTIMATES_DB").expect("COMSERV_ESTIMATES_DB not set");
     if !std::path::Path::new(&comserv_esti_db).exists() {
         std::fs::File::create(&comserv_esti_db).expect("Unable to create the estimates db file");
         info!("Created estimates db file: {:?}", &comserv_esti_db);
         estimates += 1;
-    } else {
-        info!("Estimates db file exists: {:?}", &comserv_esti_db);
-    }
+    } 
+
+    let _est_table = db::create_estimates_table().unwrap();
+
     let mut uploads = 0;
     let comserv_uploads = env::var("COMSERV_UPLOADS").expect("COMSERV_UPLOADS not set");
     if !std::path::Path::new(&comserv_uploads).exists() {

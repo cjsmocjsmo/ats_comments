@@ -2,12 +2,12 @@ use log::info;
 use rusqlite::{Connection, Result};
 use std::env;
 
-pub fn create_tables() {
-    let _at = create_acct_table();
-    let _aut = create_auth_table();
-    let _cmt = create_comments_table();
-    let _et = create_estimates_table();
-}
+// pub fn create_tables() {
+//     let _at = create_acct_table();
+//     let _aut = create_auth_table();
+//     let _cmt = create_comments_table();
+//     let _et = create_estimates_table();
+// }
 
 pub fn create_acct_table() -> Result<()> {
     let db_path = env::var("COMSERV_ACCT_DB").expect("COMSERV_ACCT_DB not set");
