@@ -59,7 +59,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .wrap(cors)
             .service(server::test)
-            .service(server::add_comment)
+            .service(server::com_upload)
             .service(server::all_comments)
             .service(server::add_estimate)
             .service(server::all_estimates)

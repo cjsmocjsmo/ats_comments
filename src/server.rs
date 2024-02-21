@@ -1,20 +1,20 @@
 use crate::accounts;
 use crate::sendmail;
 use crate::types;
-// use actix_multipart::Multipart;
+use actix_multipart::Multipart;
 // use actix_web::{get, post, web, web::Redirect, Error, HttpResponse, Responder};
-use actix_web::{get, web, web::Redirect, HttpResponse, Responder};
+use actix_web::error::ErrorInternalServerError;
+use actix_web::{get, post, web, web::Redirect, Error, HttpResponse, Responder};
 use chrono::prelude::*;
 use flate2::write::GzEncoder;
 use flate2::Compression;
-// use futures::{StreamExt, TryStreamExt};
+use futures::StreamExt;
 use log::info;
 use std::env;
 use std::fs;
 use std::fs::File;
-// use std::io::Write;
-// use uuid::Uuid;
-// use sanitize_filename;
+use std::io::Write;
+use std::path::Path;
 
 #[get("/test")]
 pub async fn test() -> impl Responder {
@@ -89,11 +89,72 @@ pub async fn all_estimates() -> impl Responder {
 
     HttpResponse::Ok().json(estimate_vec)
 }
+// Result<String, String, String, actix_web::Error>
+async fn upload_file(mut field: Multipart) -> (String, String, String, String, String) {
+    let mut filename = String::new();
+    let mut namez = String::new();
+    let mut emailz = String::new();
+    let mut ratingz = String::new();
+    let mut commentz = String::new();
+    let mut out_filename = String::new();
+    while let Some(item) = field.next().await {
+        if let Ok(mut item) = item {
+            if let Some(f) = item.content_disposition().get_filename() {
+                filename = f.to_string();
+            } else {
+                let mut field_name = String::new();
+                while let Some(Ok(byte)) = item.next().await {
+                    let byte_vec: Vec<u8> = byte.to_vec();
+                    if let Ok(byte_str) = String::from_utf8(byte_vec) {
+                        field_name.push_str(&byte_str);
+                    }
+                }
+                if field_name == "name" {
+                    namez = field_name;
+                } else if field_name == "email" {
+                    emailz = field_name;
+                } else if field_name == "rating" {
+                    ratingz = field_name;
+                } else if field_name == "comment" {
+                    commentz = field_name;
+                } else {
+                    // Ignore other fields without filenames
+                }
+            }
 
-#[get("/addcom/{name}/{email}/{rating}/{comment}")]
-pub async fn add_comment(f: web::Path<(String, String, String, String)>) -> impl Responder {
-    let (name, email, ratingz, commentz) = f.into_inner();
-    let eid = name.clone() + &email + &ratingz;
+            let up_loadsdir = env::var("COMSERV_UPLOADS").expect("COMSERV_UPLOADS not set");
+            let up_loads_dir = up_loadsdir.clone() + "/";
+            let out = Path::new(&up_loads_dir).join(&filename);
+            out_filename = out.to_str().unwrap().to_string();
+            let mut f = web::block(move || fs::File::create(out))
+                .await
+                .map_err(ErrorInternalServerError)
+                .unwrap();
+            while let Some(chunk) = item.next().await {
+                let data = chunk.map_err(ErrorInternalServerError).unwrap();
+                f = web::block(move || {
+                    let mut file = f?;
+                    file.write_all(&data)?;
+                    Ok(file)
+                })
+                .await
+                .map_err(ErrorInternalServerError)
+                .unwrap();
+            }
+        }
+    }
+    (out_filename, namez, emailz, ratingz, commentz)
+}
+
+#[post("/comupload")]
+pub async fn com_upload(payload: Multipart) -> Result<HttpResponse, Error> {
+    
+    let result = upload_file(payload).await;
+    let media = result.0;
+    let name = result.1;
+    let email = result.2;
+    let rating = result.3;
+    let eid = name.clone() + &email + &rating;
     let comidz = accounts::create_hash(eid.clone());
     let has_acct = accounts::has_account(email.clone());
     if has_acct {
@@ -105,12 +166,12 @@ pub async fn add_comment(f: web::Path<(String, String, String, String)>) -> impl
             comid: comidz.clone(),
             name: name.clone(),
             email: email.clone(),
-            comment: commentz.clone(),
-            rating: ratingz,
+            comment: "None".to_string(),
+            rating: rating,
             date: today.clone(),
             accepted: "None".to_string(),
             rejected: "None".to_string(),
-            mediapath: "None".to_string(),
+            mediapath: media.clone(),
         };
         info!("has_account COMMENTS: {:#?}", comment);
         let com_serv_comment_db =
@@ -136,12 +197,12 @@ pub async fn add_comment(f: web::Path<(String, String, String, String)>) -> impl
             comid: comidz.clone(),
             name: name.clone(),
             email: email.clone(),
-            comment: commentz.clone(),
-            rating: ratingz,
+            comment: "None".to_string(),
+            rating: rating,
             date: today.clone(),
             accepted: "None".to_string(),
             rejected: "None".to_string(),
-            mediapath: "None".to_string(),
+            mediapath: media.clone(),
         };
         info!("create_account comment: {:#?}", comment);
         let com_serv_comment_db =
@@ -150,17 +211,88 @@ pub async fn add_comment(f: web::Path<(String, String, String, String)>) -> impl
         conn.execute(
             "INSERT INTO comments (acctid, comid, name, email, comment, rating, date, accepted, rejected, mediapath) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10)",
             &[&comment.acctid, &comment.comid, &comment.name, &comment.email, &comment.comment, &comment.rating, &comment.date, &comment.accepted, &comment.rejected, &comment.mediapath],
-        ).expect("unable to insert comment");
-
+        )
+        .expect("unable to insert comment");
         let mailz = sendmail::send_com_mail(comment).await;
         match mailz {
             Ok(_) => info!("comment Mail Sent"),
-            Err(e) => info!("comment Mail Error: {:?}", e),
+            Err(e) => info!("Mail Error: {:?}", e),
         };
-    };
+    }
 
-    HttpResponse::Ok().body("\ncomment inserted into db\n")
+    Ok(HttpResponse::Ok().body("upload recieved"))
 }
+// #[get("/addcom/{name}/{email}/{rating}/{comment}")]
+// pub async fn add_comment(f: web::Path<(String, String, String, String)>) -> impl Responder {
+//     let (name, email, ratingz, commentz) = f.into_inner();
+//     let eid = name.clone() + &email + &ratingz;
+//     let comidz = accounts::create_hash(eid.clone());
+//     let has_acct = accounts::has_account(email.clone());
+//     if has_acct {
+//         let acct_info = accounts::account_info_from_email(email.clone());
+//         let acctid = &acct_info[0].acctid;
+//         let today = Local::now().format("%Y-%m-%d").to_string();
+//         let comment = types::FullComment {
+//             acctid: acctid.to_string(),
+//             comid: comidz.clone(),
+//             name: name.clone(),
+//             email: email.clone(),
+//             comment: commentz.clone(),
+//             rating: ratingz,
+//             date: today.clone(),
+//             accepted: "None".to_string(),
+//             rejected: "None".to_string(),
+//             mediapath: "None".to_string(),
+//         };
+//         info!("has_account COMMENTS: {:#?}", comment);
+//         let com_serv_comment_db =
+//             env::var("COMSERV_COMMENTS_DB").expect("COMSERV_COMMENTS_DB not set");
+//         let conn = rusqlite::Connection::open(com_serv_comment_db).unwrap();
+//         conn.execute(
+//             "INSERT INTO comments (acctid, comid, name, email, comment, rating, date, accepted, rejected, mediapath) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10)",
+//             &[&comment.acctid, &comment.comid, &comment.name, &comment.email, &comment.comment, &comment.rating, &comment.date, &comment.accepted, &comment.rejected, &comment.mediapath],
+//         )
+//         .expect("unable to insert comment");
+
+//         let mailz = sendmail::send_com_mail(comment).await;
+//         match mailz {
+//             Ok(_) => info!("comment Mail Sent"),
+//             Err(e) => info!("Mail Error: {:?}", e),
+//         };
+//     } else {
+//         let acct_info = accounts::create_account(name.clone(), email.clone());
+//         let acctid = &acct_info.acctid;
+//         let today = Local::now().format("%Y-%m-%d").to_string();
+//         let comment = types::FullComment {
+//             acctid: acctid.to_string(),
+//             comid: comidz.clone(),
+//             name: name.clone(),
+//             email: email.clone(),
+//             comment: commentz.clone(),
+//             rating: ratingz,
+//             date: today.clone(),
+//             accepted: "None".to_string(),
+//             rejected: "None".to_string(),
+//             mediapath: "None".to_string(),
+//         };
+//         info!("create_account comment: {:#?}", comment);
+//         let com_serv_comment_db =
+//             env::var("COMSERV_COMMENTS_DB").expect("COMSERV_COMMENTS_DB not set");
+//         let conn = rusqlite::Connection::open(com_serv_comment_db).unwrap();
+//         conn.execute(
+//             "INSERT INTO comments (acctid, comid, name, email, comment, rating, date, accepted, rejected, mediapath) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10)",
+//             &[&comment.acctid, &comment.comid, &comment.name, &comment.email, &comment.comment, &comment.rating, &comment.date, &comment.accepted, &comment.rejected, &comment.mediapath],
+//         ).expect("unable to insert comment");
+
+//         let mailz = sendmail::send_com_mail(comment).await;
+//         match mailz {
+//             Ok(_) => info!("comment Mail Sent"),
+//             Err(e) => info!("comment Mail Error: {:?}", e),
+//         };
+//     };
+
+//     HttpResponse::Ok().body("\ncomment inserted into db\n")
+// }
 
 #[get("/addesti/{name}/{address}/{city}/{phone}/{email}/{comment}/{reqdate}")]
 pub async fn add_estimate(
