@@ -33,7 +33,7 @@ async fn main() -> std::io::Result<()> {
     // if db_check == 6 {
     //     let _create_tables = db::create_tables();
     // }
-
+    let static_path = env::var("COMSERV_STATIC").unwrap();
     let uploads_path = env::var("COMSERV_UPLOADS").unwrap();
     // let socket = functions::gen_server_addr();
 
@@ -67,6 +67,7 @@ async fn main() -> std::io::Result<()> {
             .service(server::reject_comment)
             .service(server::esti_complete)
             .service(server::backup_file)
+            .service(fs::Files::new("/static", static_path.clone()).show_files_listing())
             .service(fs::Files::new("/uploads", uploads_path.clone()).show_files_listing())
     })
     .bind_openssl("0.0.0.0:443", builder)?
