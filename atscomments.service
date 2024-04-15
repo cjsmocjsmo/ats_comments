@@ -1,13 +1,11 @@
 [Unit]
-Description=Photo Frame GTK service file
-After=graphical-session.target
+Description=Ats comments service file
+After=network.target
 
 [Service]
+User=pi
 Type=forking
 ExecStart=/usr/bin/ats_comments
-
-User=root
-Group=root
 
 [Install]
 WantedBy=multi-user.target
